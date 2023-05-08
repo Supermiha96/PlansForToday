@@ -1,0 +1,6 @@
+Azul oscuro = #2E5364
+Azul menos oscuro = #365B6D
+Turquesa oscuro = #41C1BA
+Turquesa mas claro = #4CCBC4
+Grisacio = #F2F1EC
+Blanco = #FFFFFF
