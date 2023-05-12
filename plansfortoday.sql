@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-05-2023 a las 19:29:31
+-- Tiempo de generación: 10-05-2023 a las 23:09:11
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -39,7 +39,7 @@ CREATE TABLE `categoria` (
 --
 
 CREATE TABLE `ciudad` (
-  `ciu_id` int(10) NOT NULL,
+  `ciu_id` int(11) NOT NULL,
   `ciu_nom` varchar(50) NOT NULL,
   `ciu_lat` int(50) NOT NULL,
   `ciu_long` int(50) NOT NULL
@@ -59,6 +59,18 @@ CREATE TABLE `comentario` (
   `com_fec` date NOT NULL,
   `usu_cod` int(11) NOT NULL,
   `post_cod` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `imagenespost`
+--
+
+CREATE TABLE `imagenespost` (
+  `img_id` int(11) NOT NULL,
+  `img_nom` varchar(50) NOT NULL,
+  `id_post` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -85,7 +97,7 @@ CREATE TABLE `post` (
 --
 
 CREATE TABLE `usuario` (
-  `usu_id` int(10) NOT NULL,
+  `usu_id` int(11) NOT NULL,
   `usu_nom` varchar(40) NOT NULL,
   `usu_apes` varchar(50) NOT NULL,
   `usu_email` int(50) NOT NULL,
@@ -120,6 +132,13 @@ ALTER TABLE `comentario`
   ADD KEY `post_cod` (`post_cod`);
 
 --
+-- Indices de la tabla `imagenespost`
+--
+ALTER TABLE `imagenespost`
+  ADD PRIMARY KEY (`img_id`),
+  ADD UNIQUE KEY `id_post` (`id_post`);
+
+--
 -- Indices de la tabla `post`
 --
 ALTER TABLE `post`
@@ -148,13 +167,19 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
-  MODIFY `ciu_id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `ciu_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `comentario`
 --
 ALTER TABLE `comentario`
   MODIFY `com_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `imagenespost`
+--
+ALTER TABLE `imagenespost`
+  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `post`
@@ -166,7 +191,7 @@ ALTER TABLE `post`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `usu_id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `usu_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -178,6 +203,12 @@ ALTER TABLE `usuario`
 ALTER TABLE `comentario`
   ADD CONSTRAINT `comentario_ibfk_1` FOREIGN KEY (`usu_cod`) REFERENCES `usuario` (`usu_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `comentario_ibfk_2` FOREIGN KEY (`post_cod`) REFERENCES `post` (`post_id`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `imagenespost`
+--
+ALTER TABLE `imagenespost`
+  ADD CONSTRAINT `imagenespost_ibfk_1` FOREIGN KEY (`id_post`) REFERENCES `post` (`post_id`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `post`
