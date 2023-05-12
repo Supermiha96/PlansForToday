@@ -1,69 +1,75 @@
 <?php
 
 
-function theHeader($title = null)
+function theHeader()
 {
 ?>
-  <!DOCTYPE html>
-  <html lang="es">
-
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> <?php if ($title) {
-              echo $title . ' - ';
-            } ?>Plans For Today</title>
-    <link rel="icon" href="./img/logos/8.svg" sizes="any" type="image/svg+xml">
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./css/style.css">
-
-
-  </head>
 
   <header class="border-bottom">
 
-    <nav class="navbar navbar-expand-lg p-3">
-      <div class="container-fluid">
-        <a  id="logoNavbar" href="./index.php" class="d-flex align-items-center mb-1 mb-lg-0 text-decoration-none w-25">
-          <img class="d-flex justify-content-around h-100" src="./img/logos/6.svg" alt="logoPlansForToday">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-expand-lg navbar-light bg-navbarYfooter">
+      <a class="navbar-brand" href="#">
+        <img src="./img/logos/5.svg" alt="PLANS FOR TODAY" width="200">
+      </a>
 
-        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
-          <ul class="navbar-nav ms-auto ">
-            <li class="nav-item">
-              <a class="nav-link mx-2 active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link mx-2" href="#">Products</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link mx-2" href="#">Pricing</a>
-            <li class="nav-item dropdown">
-              <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-regular fa-user"></i>
-              </a>
-              <ul class="dropdown-menu me-3" aria-labelledby="navbarDropdownMenuLink">
-                <li><a class="dropdown-item" href="#">Blog</a></li>
-                <li><a class="dropdown-item" href="#">About Us</a></li>
-                <li><a class="dropdown-item" href="#">Contact us</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span ><i class="fa-solid fa-bars" style="color: #f2f1ec;"></i></span>
+      </button>
+
+      <div class="collapse navbar-collapse text-white" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Acerca de</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contacto</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav me-3">
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#modalLoginForm">Iniciar sesión</a>
+          </li>
+        </ul>
       </div>
     </nav>
+
+
+    <!-- Modal de inicio de sesión -->
+    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <i class="fas fa-envelope prefix grey-text"></i>
+          <input type="email" id="defaultForm-email" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
+        </div>
+
+        <div class="md-form mb-4">
+          <i class="fas fa-lock prefix grey-text"></i>
+          <input type="password" id="defaultForm-pass" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button class="btn btn-default">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
   </header>
-
-  <body>
-
-
-
   <?php
 }
 
@@ -72,15 +78,40 @@ function theHeader($title = null)
 function theFooter()
 {
   ?>
+    <footer class="w-100 mt-6">
+  <div class="container border-top">
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <h3>Nosotros</h3>
+        <p>Te damos los planes, solo te queda ejecutarlos.</p>
+      </div>
+      <div class="col-12 col-md-4 mb-md-3">
+        <h3>Contacto</h3>
+        <ul class="list-unstyled">
+          <li><i class="fa fa-phone"></i> (+34) 666777888</li>
+          <li><i class="fa fa-envelope"></i> contacto@plansfortoday.com</li>
+          <li><i class="fa fa-map-marker"></i> Calle Ancha 2, Écija,Sevilla</li>
+        </ul>
+      </div>
+      <div class="col-12 col-md-4">
+        <h3>Síguenos</h3>
+        <div>        
+        <ul class="social list-unstyled px-5">
+          <li><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
+          <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
+          <li><a href="#"><i class="fa-brands fa-instagram"></i></i></a></li>
+        </ul>
+        </div>
+      </div>
     </div>
+    <div class="row">
+      <div class="col-12">
+        <p class="text-center">© 2023 Plans For Today. Todos los derechos reservados.</p>
+      </div>
     </div>
-    <?php // REEMPLAZAR TEXTO EN MAYUSCULAS (TU_NOMBRE)
-    define("TU_NOMBRE", "Juan Carlos");
-    ?>
-    <footer>Copyright © <?php date("Y") ?><span><?= TU_NOMBRE ?> <a href='index.php'>Blog Botánico</a></span></footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-  </body>
+  </div>
 
-  </html>
+  
+</footer>
 <?php
 }

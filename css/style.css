@@ -1,11 +1,53 @@
-#logoNavbar{
-    height: 12em!important;
-}
-header{
-    background-color: #F2F1EC;
-    
-}
 body{
     color: #2E5364!important;
+    background-color: #ffffff;
 }
+.bg-navbarYfooter {
+    background-color: #2E5364;
+   
+}
+.nav-link{
+    color: #F2F1EC !important;
+    font-size: 20px !important;
+}
+#search-section {
+    width: 100%;
+    min-height: 500px;
+    max-height: 700px;
+    background: linear-gradient(0deg, rgb(255, 255, 255) 0%, #2E5364 100%);
+    color: #ffffff;
+  }
+  #search-section p{
+    font-size: 18px;
+  }
+  
+  #search-section .row {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+  #search-section .input-group {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .border-bottom{
+    border-bottom: 0px !important;
+  }
+  .navbar-light .navbar-toggler{
+    border-color: #F2F1EC !important;
+    color: #F2F1EC !important;
+  }
+  
+  .mt-6{
+    margin-top: 7em !important;
+  }
+  footer{
+    font-size: 18px !important;
+  }
+
+  .mb-md-5{
+    margin-bottom: 20px;
+  }
 
