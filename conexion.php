@@ -18,3 +18,28 @@ function conectarConBD(){
     }
     return $bd;
 }
+
+/*
+function conectarConBD()
+{
+    $host_name = 'db5013056405.hosting-data.io';
+    $database = 'dbs10962471';
+    $user_name = 'dbu3049804';
+    $password = 'PlansForToday';
+    $dbh = null;
+
+
+    global $bd;
+    try {
+        if ($dbh == null) {
+            $dbh = new PDO("mysql:host=$host_name; dbname=$database;", $user_name, $password);
+        }
+    } catch (PDOException $e) {
+        $dbh = null;
+        echo "Error!:" . $e->getMessage() . "<br/>";
+        die();
+    }
+    return $bd;
+}
+conectarConBD();
+*/

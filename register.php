@@ -34,36 +34,36 @@ require_once "funciones.php";
 					</div>
 					<div class="card fat">
 						<div class="card-body">
-							<h4 class="card-title">Register</h4>
+							<h4 class="card-title">Registro</h4>
 							<form method="POST" class="my-login-validation" novalidate="">
 								<div class="form-group">
-									<label for="name">Name</label>
+									<label for="name">Nombre</label>
 									<input id="name" type="text" class="form-control" name="name" required autofocus>
 									<div class="invalid-feedback">
-										What's your name?
+										¿Como te llamas?
 									</div>
 								</div>
 
 								<div class="form-group">
-									<label for="email">E-Mail Address</label>
+									<label for="email">E-Mail</label>
 									<input id="email" type="email" class="form-control" name="email" required>
 									<div class="invalid-feedback">
-										Your email is invalid
+										Tu e-mail no es valido
 									</div>
 								</div>
 
 								<div class="form-group">
-									<label for="password">Password</label>
+									<label for="password">Contraseña</label>
 									<input id="password" type="password" class="form-control" name="password" required data-eye>
 									<div class="invalid-feedback">
-										Password is required
+										La contraseña es obligatoria
 									</div>
 								</div>
 
 								<div class="form-group">
 									<div class="custom-checkbox custom-control">
 										<input type="checkbox" name="agree" id="agree" class="custom-control-input" required="">
-										<label for="agree" class="custom-control-label">I agree to the <a href="#">Terms and Conditions</a></label>
+										<label for="agree" class="custom-control-label">Estoy de acuerdo con <a href="#">Terminos y Condiciones</a></label>
 										<div class="invalid-feedback">
 											You must agree with our Terms and Conditions
 										</div>
@@ -72,11 +72,11 @@ require_once "funciones.php";
 
 								<div class="form-group m-0">
 									<button type="submit" class="btn btn-primary btn-block">
-										Register
+										Registrame
 									</button>
 								</div>
 								<div class="mt-4 text-center">
-									Already have an account? <a href="login.php">Login</a>
+									¿Ya tienes cuenta? <a href="login.php">Inicia Sesión</a>
 								</div>
 							</form>
 						</div>

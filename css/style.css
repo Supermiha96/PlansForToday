@@ -17,6 +17,10 @@ body{
     background: linear-gradient(0deg, rgb(255, 255, 255) 0%, #2E5364 100%);
     color: #ffffff;
   }
+  .fondo{
+    background: linear-gradient(0deg, rgb(255, 255, 255) 0%, #2E5364 100%);
+    color: #000000;
+  }
   #search-section p{
     font-size: 18px;
   }
@@ -49,5 +53,8 @@ body{
 
   .mb-md-5{
     margin-bottom: 20px;
+  }
+  .text-black{
+    text-decoration: black !important;
   }
 

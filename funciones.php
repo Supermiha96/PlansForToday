@@ -7,19 +7,19 @@ function theHeader()
 
   <header class="border-bottom">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-navbarYfooter">
-      <a class="navbar-brand" href="#">
-        <img src="./img/logos/5.svg" alt="PLANS FOR TODAY" width="200">
+    <nav class="navbar navbar-expand-lg navbar-light bg-navbarYfooter px-3 px-sm-5 ">
+      <a class="navbar-brand" href="./index.php">
+        <img src="./img/logos/PlansForToday.svg" alt="PLANS FOR TODAY" width="100">
       </a>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span><i class="fa-solid fa-bars" style="color: #f2f1ec;"></i></span>
       </button>
 
-      <div class="collapse navbar-collapse text-white" id="navbarNav">
+      <div class="collapse navbar-collapse text-white text-center" id="navbarNav">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Inicio</a>
+            <a class="nav-link" href="./index.php">Inicio</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Acerca de</a>
@@ -31,115 +31,11 @@ function theHeader()
 
         <ul class="navbar-nav me-3">
           <li class="nav-item">
-            <a class="nav-link" href="./login.php" data-toggle="modal" >Iniciar sesión</a>
+            <a class="nav-link" href="./login.php" >Iniciar sesión</a>
           </li>
         </ul>
       </div>
     </nav>
-
-
-    <!-- Modal de inicio de sesión -->
-    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h4 class="modal-title w-100 font-weight-bold">Iniciar sesión</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body mx-3">
-            <div class="md-form mb-5">
-              <i class="fas fa-envelope prefix grey-text"></i>
-              <input type="email" id="defaultForm-email" class="form-control validate">
-              <label data-error="wrong" data-success="right" for="defaultForm-email">Tu correo electrónico</label>
-            </div>
-
-            <div class="md-form mb-4">
-              <i class="fas fa-lock prefix grey-text"></i>
-              <input type="password" id="defaultForm-pass" class="form-control validate">
-              <label data-error="wrong" data-success="right" for="defaultForm-pass">Tu contraseña</label>
-            </div>
-
-            <p class="text-center">¿No tienes una cuenta? <a href="#modalRegistro" data-toggle="modal" data-dismiss="modal">Regístrate</a></p>
-          </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button class="btn btn-default">Iniciar sesión</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal de registro -->
-    <div class="modal fade" id="modalRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h4 class="modal-title w-100 font-weight-bold">Registro</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <form action="" method="post">
-            <div class="modal-body mx-3">
-
-              <div class="md-form mb-4">
-                <i class="fas fa-user prefix grey-text"></i>
-                <label data-error="wrong" data-success="right" for="defaultForm-nombre">Nombre</label>
-                <input type="text" id="defaultForm-nombre" name="nombre" class="form-control validate">
-
-              </div>
-
-              <div class="md-form mb-4">
-                <i class="fas fa-user prefix grey-text"></i>
-                <label data-error="wrong" data-success="right" for="defaultForm-apellidos">Apellidos</label>
-                <input type="text" id="defaultForm-apellidos" name="apellidos" class="form-control validate">
-
-              </div>
-
-              <div class="md-form mb-4">
-                <i class="fas fa-phone prefix grey-text"></i>
-                <label data-error="wrong" data-success="right" for="defaultForm-telefono">Teléfono</label>
-                <input type="text" id="defaultForm-telefono" name="telefono" class="form-control validate">
-
-              </div>
-
-              <div class="md-form mb-4">
-                <i class="fas fa-envelope prefix grey-text"></i>
-                <label data-error="wrong" data-success="right" for="defaultForm-email">Correo electrónico</label>
-                <input type="email" id="defaultForm-email" name="correoElectronico" class="form-control validate">
-
-              </div>
-
-              <div class="md-form mb-4">
-                <i class="fas fa-lock prefix grey-text"></i>
-                <label data-error="wrong" data-success="right" for="defaultForm-password">Contraseña</label>
-                <input type="password" id="defaultForm-password" name="contraseña" class="form-control validate">
-
-              </div>
-
-              <div class="md-form mb-4">
-                <i class="fas fa-city prefix grey-text"></i>
-                <label data-error="wrong" data-success="right" for="defaultForm-ciudad">Ciudad</label>
-                <input type="text" id="defaultForm-ciudad" name="ciudad" class="form-control validate">
-
-              </div>
-              <div class="md-form mb-4">
-                <i class="fas fa-city prefix grey-text"></i>
-                <label data-error="wrong" data-success="right" for="defaultForm-pais">Pais</label>
-                <input type="text" id="defaultForm-pais" name="pais" class="form-control validate">
-
-              </div>
-
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-              <input type="submit" class="btn btn-default" value="Registrarse">
-
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
   </header>
 <?php
 }
