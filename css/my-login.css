@@ -55,6 +55,10 @@ body.my-login-page {
 .h-100{
 	background: linear-gradient(0deg, rgb(255, 255, 255) 0%, #2E5364 100%);
 }
+.alerta{
+	position: absolute !important;
+	width: 100% !important;
+}
 
 @media screen and (max-width: 425px) {
 	.my-login-page .card-wrapper {

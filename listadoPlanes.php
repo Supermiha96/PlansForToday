@@ -47,15 +47,15 @@ require_once "funciones.php";
                         <div class="row bg-white desplazamiento ms-4">
                             <div class="col-4 py-xl-2 d-flex align-items-center justify-content-center"><img
                                     class="img-fluid max-heigth"
-                                    src="https://static.chollometro.com/threads/raw/DdVcw/984165_1/re/1024x1024/qt/60/984165_1.jpg"
+                                    src="./img/ejemplo/imagenEjemplo.jpg"
                                     alt=""></div>
                             <div class="col-8 pt-3 pt-xl-5">
                                 <h4 class="">Silla Gaming Oficina Racing Sillon Gamer Racer X</h4>
                                 <h5>Profesional Videojuegos PC</h5>
-                                <p>77,99 €</p>
+                                <p>Puntuación</p>
                                 
                                 <p><i class="fa-solid fa-truck-arrow-right"></i> Envio gratis</p>
-                                <button class="btn btn-outline-success mb-2"><a href="./plan.php">Ir a la oferta</a> </button>
+                                <a href="./plan.php"><button class="btn btn-outline-success mb-2">Ver el plan completo </button></a>
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@ require_once "funciones.php";
                         <div class="row bg-white desplazamiento ms-4">
                             <div class="col-4 py-xl-2 d-flex align-items-center justify-content-center"><img
                                     class="img-fluid max-heigth"
-                                    src="https://static.chollometro.com/threads/raw/DdVcw/984165_1/re/1024x1024/qt/60/984165_1.jpg"
+                                    src="./img/ejemplo/imagenEjemplo.jpg"
                                     alt=""></div>
                             <div class="col-8 pt-3 pt-xl-5">
                                 <h4 class="">Silla Gaming Oficina Racing Sillon Gamer Racer X</h4>
@@ -78,7 +78,7 @@ require_once "funciones.php";
                         <div class="row bg-white desplazamiento ms-4">
                             <div class="col-4 py-xl-2 d-flex align-items-center justify-content-center"><img
                                     class="img-fluid max-heigth"
-                                    src="https://static.chollometro.com/threads/raw/DdVcw/984165_1/re/1024x1024/qt/60/984165_1.jpg"
+                                    src="./img/ejemplo/imagenEjemplo.jpg"
                                     alt=""></div>
                             <div class="col-8 pt-3 pt-xl-5">
                                 <h4 class="">Silla Gaming Oficina Racing Sillon Gamer Racer X</h4>
@@ -90,6 +90,7 @@ require_once "funciones.php";
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>

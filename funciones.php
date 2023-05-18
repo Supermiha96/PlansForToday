@@ -31,7 +31,7 @@ function theHeader()
 
         <ul class="navbar-nav me-3">
           <li class="nav-item">
-            <a class="nav-link" href="./login.php" >Iniciar sesión</a>
+            <a class="nav-link" href="./login.php">Iniciar sesión</a>
           </li>
         </ul>
       </div>
@@ -81,4 +81,246 @@ function theFooter()
 
   </footer>
 <?php
+}
+/**
+ * Funcion que devuelve la fecha hora actual en formato dd/mm/AAAA HH24:mi:ss
+ * @return type
+ */
+function getNow()
+{
+  return date("d/m/Y H:i:s");
+}
+
+/**
+ * Variable global para mensajes
+ */
+$mensaje = "";
+
+/**
+ * Establecemos la zona horaria para todo lo relacionado con las fechas
+ */
+date_default_timezone_set('Europe/Madrid');
+
+/**
+ * Construye un parrafo de error a partir de un mensaje pasado como parametro para mostrar en la p&aacute;gina
+ * @param type $msg
+ * @return type
+ */
+function lanzarError($msg)
+{
+  return "
+  <div class=\" alerta alert alert-danger alert-dismissible fade show \" role=\"alert\">
+  <strong>~$msg</strong>
+  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+    <span aria-hidden=\"true\">&times;</span>
+  </button>
+</div>";
+}
+
+/**
+ * Construye un parrafo de exito a partir de un mensaje pasado como parametro
+ * @param type $msg
+ * @return type
+ */
+function lanzarExito($msg)
+{
+  return "
+  <div class=\" alerta alert alert-success alert-dismissible fade show \" role=\"alert\">
+  <strong>~$msg</strong>
+  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+    <span aria-hidden=\"true\">&times;</span>
+  </button>
+</div>";
+}
+
+/**
+ * Valida el usuario/password pasados como parametros contra la base de datos
+ * @param type $email
+ * @param String $password
+ * @param type $conexion
+ * @return boolean
+ */
+function validarLoginUsuario($email, $password, $conexion, &$mensaje)
+{
+  $resultado = false;
+
+  try {
+    $query = $conexion->prepare('SELECT `usu_email`,`usu_pass` FROM `usuario` WHERE `usu_email` =?');
+    $query->bindParam(1, $email);
+    $query->execute();
+    $count = $query->rowCount();
+    if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+      if ($row['login'] == $email && password_verify($password, $row['password'])) {
+        $resultado = true;
+      } else {
+        throw new Exception("Usuario o password incorrecto.");
+      }
+    } else {
+      throw new Exception("No se encuentra el usuario");
+    }
+    $query->closeCursor();
+  } catch (PDOException $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+  } catch (Exception $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+  }
+  return $resultado;
+}
+/**
+ * Comprueba si los datos son correctos para dar de alta un nuevo usuario
+ * @param String $password
+ * @param type $password_confirm
+ * @param type $mensaje
+ */
+function validarNuevoUsuario($password, $password_confirm, $email, &$mensaje)
+{
+
+  if (strlen($password) > 0) { // Validamos la longitud del password
+    if ($password == $password_confirm) { // Validamos que las contraseñas coincidan
+      if (strlen($email) > 0) {
+        return true;
+      } else {
+        $mensaje = "Error: Debe introducir un nombre v&aacute;lido";
+      }
+    } else {
+      $mensaje = "Error: Las contraseñas no coinciden";
+    }
+  } else {
+    $mensaje = "Error: Debe introducir una contraseña v&aacute;lida";
+  }
+  return false;
+}
+
+/**
+ * Inserta un usuario con todos sus datos pasados como parametros en la base de datos
+ * @param String $password
+ * @param type $password_confirm
+ * @param type $nombre
+ * @param type $fNacimiento
+ * @param type $conexion
+ * @param type $mensaje
+ * @return boolean
+ */
+function insertarUsuario($nombre, $password, $email, $conexion, &$mensaje)
+{
+
+  $resultado = false;
+  try {
+    // Generamos un password de una sola via con la funcion crypt(). Ingnoramos los warning que nos arroje con @ 
+    @$password_crypt = crypt($password, '$1$rasmusle$');
+    $query = $conexion->prepare('INSERT INTO `usuario` (`usu_nom`, `usu_email`, `usu_pass`, `usu_rol`) VALUES (?, ?, ?, 0 )');
+    $query->bindParam(1, $nombre);
+    $query->bindParam(2, $email);
+    $query->bindParam(3, $password_crypt);
+    //$query->bindParam(4, 0);
+
+    $rowcount = $query->execute();
+    if ($rowcount == 1) {
+      // Esperamos solo la insercion de 1 registro
+      $resultado = true;
+    } else {
+      // No se ha insertado
+      $resultado = false;
+    }
+  } catch (PDOException $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+  } catch (Exception $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+  }
+  return $resultado;
+}
+
+
+/*function insertarUsuario($login, $password, $email, $conexion, &$mensaje)
+{
+  $resultado = false;
+  try {
+
+
+    $bloqueado = 1;
+    // Generamos un password de una sola via con la funcion crypt(). Ingnoramos los warning que nos arroje con @ 
+    @$password_crypt = crypt($password);
+    $query = $conexion->prepare('INSERT INTO foreros (login, password, email, bloqueado) VALUES (?, ?, ?, ?)');
+    $query->bindParam(1, $login);
+    $query->bindParam(2, $password_crypt);
+    $query->bindParam(3, $email);
+    $query->bindParam(4, $bloqueado);
+
+    $rowcount = $query->execute();
+    if ($rowcount == 1) {
+      // Esperamos solo la insercion de 1 registro
+      $resultado = true;
+    } else {
+      // No se ha insertado
+      $resultado = false;
+    }
+  } catch (PDOException $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+  } catch (Exception $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+  }
+  return $resultado;
+}*/
+
+/**
+ * Bloquea un usuario en la base de datos actualizando el campo bloqueado a 1
+ * @param type $login
+ * @param type $conexion
+ * @param type $mensaje
+ * @return boolean
+ */
+function bloquearUsuario($login, $conexion)
+{
+  $resultado = false;
+  try {
+    $query = $conexion->prepare("UPDATE foreros SET bloqueado = 1 WHERE login = ?");
+    $query->bindParam(1, $login);
+    $rowcount = $query->execute();
+    $resultado = true;
+  } catch (PDOException $e) {
+    $resultado = false;
+  } catch (Exception $e) {
+    $resultado = false;
+  }
+  return $resultado;
+}
+
+/**
+ * Busca un usuario determinado por login en la base de datos y devuelve un objeto array asociativo con los datos del usuario
+ * @param type $login
+ * @param type $conexion
+ * @param type $mensaje
+ * @return type
+ */
+function buscarUsuarioEnBd($email, $conexion, &$mensaje)
+{
+
+  $objUsuario = null;
+  try {
+
+    $query = $conexion->prepare("SELECT `usu_nom`,`usu_pass`,`usu_email` FROM `usuario` WHERE `usu_email` =  ?");
+    $query->bindParam(1, $email);
+    $query->execute();
+
+    if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+      $objUsuario = $row;
+    }
+
+    $query->closeCursor();
+  } catch (PDOException $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+    die();
+  } catch (Exception $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+    die();
+  }
+  return $objUsuario;
 }

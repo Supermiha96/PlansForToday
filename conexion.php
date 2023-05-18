@@ -3,21 +3,23 @@
 // SI HAY ERRORES, SALIR
 // USAR UTF-8
 
-$bd;
+$host_name = '192.168.192.129';
+$database = 'plansfortoday';
+$user_name = 'dwes';
+$password = 'abc123';
 
-function conectarConBD(){
-    global $bd;
-    try{
-        if ($bd == null){
-            $bd = new PDO("mysql:host=localhost;dbname=plansfortoday;charset=utf8", "dwes", "abc123");
-        }
+global $conexion;
+try {
+    if ($conexion == null) {
+        $conexion = new PDO("mysql:host=$host_name; dbname=$database;", $user_name, $password);
+        
     }
-     catch(PDOException $p){
-        $bd = null;
-        echo "<p style='color: red'>Hubo un error en la conexión a la Base de datos.</p>";
-    }
-    return $bd;
+} catch (PDOException $p) {
+    $bd = null;
+    echo "<p style='color: red'>Hubo un error en la conexión a la Base de datos.</p>";
 }
+return $conexion;
+
 
 /*
 function conectarConBD()

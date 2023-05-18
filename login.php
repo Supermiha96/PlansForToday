@@ -1,31 +1,55 @@
-<?php 
+<?php
 require_once "funciones.php";
 ?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php //if ($title) { echo $title . ' - ';} //
-            ?>Plans For Today</title>
-    <link rel="icon" href="./img/logos/8.svg" sizes="any" type="image/svg+xml">
-    <!-- CSS only -->
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><?php //if ($title) { echo $title . ' - ';} //
+			?>Plans For Today</title>
+	<link rel="icon" href="./img/logos/8.svg" sizes="any" type="image/svg+xml">
+	<!-- CSS only -->
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./css/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="./css/style.css">
 	<link rel="stylesheet" type="text/css" href="./css/my-login.css">
+	<?php
 
+	if (isset($_POST['submit'])) {
+		$email = $_POST['email'];
+		$password = $_POST['password'];
 
-
+		if (!empty($email) && !empty($password)) {
+			// Validaci&oacute;n de usuario contra la bbdd
+			if (!validarLoginUsuario($email, $password, $conexion, $mensaje)) {
+				$mensaje = lanzarError($mensaje);
+			} else {
+				$mensaje = lanzarExito("Usuario identificado correctamente");
+				// Iniciamos la sesi&oacute;n
+				session_start();
+				// Metemos el login de usuario en la sesi&oacute;n
+				$_SESSION['usuario'] = $email;
+				// Registramos la fecha hora de conexion
+				print "<p>hora conexion " . getNow() . "</p>";
+				$_SESSION['conexion'] = getNow();
+				header("Location: index.php");
+			}
+		} else {
+			$mensaje = lanzarError("Debe rellenar los campos usuario y contraseña.");
+		}
+	}
+	?>
 </head>
 
 <body class="my-login-page">
-<?php
-    theHeader();
-    ?>
+	<?php
+	theHeader();
+	echo $mensaje;
+	?>
 	<section class="h-100">
 		<div class="container h-100">
 			<div class="row justify-content-md-center h-100">
@@ -39,7 +63,7 @@ require_once "funciones.php";
 							<form method="POST" class="my-login-validation" novalidate="">
 								<div class="form-group">
 									<label for="email">E-Mail</label>
-									<input id="email" type="email" class="form-control" name="email" value="" required autofocus>
+									<input id="email" type="email" class="form-control" name="email" value="<?php if (isset($_POST['email'])) echo $_POST['email'] ?>" required autofocus>
 									<div class="invalid-feedback">
 										Email no es valido
 									</div>
@@ -51,10 +75,10 @@ require_once "funciones.php";
 											¿Olvidaste la contraseña?
 										</a>
 									</label>
-									<input id="password" type="password" class="form-control" name="password" required data-eye>
-								    <div class="invalid-feedback">
-								    	Es necesaria la contraseña para iniciar sesión
-							    	</div>
+									<input id="password" type="password" class="form-control" name="password" value="<?php if (isset($_POST['password'])) echo $_POST['password'] ?>" required data-eye>
+									<div class="invalid-feedback">
+										Es necesaria la contraseña para iniciar sesión
+									</div>
 								</div>
 
 								<div class="form-group">
@@ -88,4 +112,5 @@ require_once "funciones.php";
 <?php
 theFooter();
 ?>
+
 </html>

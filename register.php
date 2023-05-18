@@ -1,44 +1,84 @@
-<?php 
+<?php
 require_once "funciones.php";
+require_once 'conexion.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php //if ($title) { echo $title . ' - ';} //
-            ?>Plans For Today</title>
-    <link rel="icon" href="./img/logos/8.svg" sizes="any" type="image/svg+xml">
-    <!-- CSS only -->
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><?php //if ($title) { echo $title . ' - ';} //
+			?>Plans For Today</title>
+	<link rel="icon" href="./img/logos/8.svg" sizes="any" type="image/svg+xml">
+	<!-- CSS only -->
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./css/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="./css/style.css">
 	<link rel="stylesheet" type="text/css" href="./css/my-login.css">
+	<?php
+
+	/**
+         * -------------------------------------
+         * ---------- NUEVO USUARIO ------------
+         * -------------------------------------
+         */
+
+	if (isset($_POST['new-user-submit'])) {
+
+		$resutado = false;
+
+		$nombre = $_POST['name'];
+		$password = $_POST['password'];
+		$password_confirm = $_POST['confirm-password'];
+		$email = $_POST['email'];
 
 
-
+		// Validamos los campos
+		if (validarNuevoUsuario($password, $password_confirm, $email, $mensaje)) {
+			// Comprobamos que el usuario no exista en bbdd
+		$objUsuario = buscarUsuarioEnBd($email, $conexion, $mensaje);
+			if ($objUsuario == null) {
+				if (insertarUsuario($nombre, $password, $email, $conexion, $mensaje)) {
+					// Alta en bbdd correcta!
+					$mensaje = lanzarExito("Usuario creado con &eacute;xito");
+					header("refresh:3;url=index.php");
+				}
+			} else {
+				$mensaje = lanzarError("El usuario ya se encuentra registrado en la base de datos ");
+			}
+		} else {
+			$mensaje = lanzarError($mensaje);
+		}
+	}
+	?>
 </head>
+
 <body class="my-login-page">
-<?php
-    theHeader();
-    ?>
-	<section class="h-100">
-		<div class="container h-100">
+	<?php
+	theHeader();
+	echo $mensaje;
+	?>
+	
+
+	<section class="h-100 ">
+		<div class="container h-100 ">
+			
 			<div class="row justify-content-md-center h-100">
-				<div class="card-wrapper">
+				
+				<div class="card-wrapper  mt-4">
 					<div class="brand">
 						<img src="img/logos/7.svg" alt="bootstrap 4 login page">
 					</div>
 					<div class="card fat">
 						<div class="card-body">
 							<h4 class="card-title">Registro</h4>
-							<form method="POST" class="my-login-validation" novalidate="">
+							<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" class="my-login-validation" novalidate="">
 								<div class="form-group">
 									<label for="name">Nombre</label>
-									<input id="name" type="text" class="form-control" name="name" required autofocus>
+									<input id="name" type="text" class="form-control" name="name" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>"required autofocus>
 									<div class="invalid-feedback">
 										¿Como te llamas?
 									</div>
@@ -46,7 +86,7 @@ require_once "funciones.php";
 
 								<div class="form-group">
 									<label for="email">E-Mail</label>
-									<input id="email" type="email" class="form-control" name="email" required>
+									<input id="email" type="email" class="form-control" name="email" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" required>
 									<div class="invalid-feedback">
 										Tu e-mail no es valido
 									</div>
@@ -54,7 +94,14 @@ require_once "funciones.php";
 
 								<div class="form-group">
 									<label for="password">Contraseña</label>
-									<input id="password" type="password" class="form-control" name="password" required data-eye>
+									<input id="password" type="password" class="form-control" name="password" value="<?php if (isset($_POST['password'])) echo $_POST['password']; ?>" required data-eye>
+									<div class="invalid-feedback">
+										La contraseña es obligatoria
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="password">Repite la contraseña</label>
+									<input id="confirm-password" type="password" class="form-control" name="confirm-password" value="<?php if (isset($_POST['confirm-password'])) echo $_POST['confirm-password']; ?>" required data-eye>
 									<div class="invalid-feedback">
 										La contraseña es obligatoria
 									</div>
@@ -65,19 +112,20 @@ require_once "funciones.php";
 										<input type="checkbox" name="agree" id="agree" class="custom-control-input" required="">
 										<label for="agree" class="custom-control-label">Estoy de acuerdo con <a href="#">Terminos y Condiciones</a></label>
 										<div class="invalid-feedback">
-											You must agree with our Terms and Conditions
+											Tienes que leer y aceptar nuestros Terminos y Condiciones
 										</div>
 									</div>
 								</div>
 
 								<div class="form-group m-0">
-									<button type="submit" class="btn btn-primary btn-block">
+									<button type="submit" name="new-user-submit" id="new-user-submit" class="btn btn-primary btn-block">
 										Registrame
 									</button>
 								</div>
 								<div class="mt-4 text-center">
 									¿Ya tienes cuenta? <a href="login.php">Inicia Sesión</a>
 								</div>
+								
 							</form>
 						</div>
 					</div>
@@ -93,4 +141,5 @@ require_once "funciones.php";
 <?php
 theFooter();
 ?>
+
 </html>

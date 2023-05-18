@@ -57,4 +57,7 @@ body{
   .text-black{
     text-decoration: black !important;
   }
+  .margin0 {
+    margin-bottom: 0px !important;
+  }
 

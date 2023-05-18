@@ -5,6 +5,8 @@ main{
 aside{
     background-color: rgba(0, 0, 0, 0.801);
     color: white;
+    font-weight: bolder !important;
+    font-size: 17px;
 }
 .desplazamiento{
     transition: 0.2s;
@@ -30,9 +32,9 @@ box-shadow: 0px 0px 22px 0px rgba(92,92,92,1);
 .oferta {
     background-image: linear-gradient(
       to right,
-      #e1db0a,
-      #e1db0a 50%,
-      rgb(255, 251, 251) 50%
+      #4CCBC4,
+      #ffffff 50%,
+      rgb(255, 255, 255) 50%
     );
     background-size: 200% 100%;
     background-position: -100%;
@@ -46,7 +48,7 @@ box-shadow: 0px 0px 22px 0px rgba(92,92,92,1);
   
   .oferta:before{
     content: '';
-    background: #e1db0a;
+    background: #F2F1EC;
     display: block;
     position: absolute;
     bottom: -3px;
