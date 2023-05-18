@@ -150,7 +150,7 @@ function validarLoginUsuario($email, $password, $conexion, &$mensaje)
     $query->execute();
     $count = $query->rowCount();
     if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-      if ($row['login'] == $email && password_verify($password, $row['password'])) {
+      if ($row['usu_email'] == $email && password_verify($password, $row['usu_pass'])) {
         $resultado = true;
       } else {
         throw new Exception("Usuario o password incorrecto.");
