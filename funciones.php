@@ -3,6 +3,7 @@
 
 function theHeader()
 {
+
 ?>
 
   <header class="border-bottom">
@@ -29,11 +30,27 @@ function theHeader()
           </li>
         </ul>
 
-        <ul class="navbar-nav me-3">
-          <li class="nav-item">
-            <a class="nav-link" href="./login.php">Iniciar sesión</a>
-          </li>
-        </ul>
+        <?php if (isset($_SESSION['usuario'])) { // Verificar si existe la sesión 'usuario' 
+        ?>
+          <ul class="navbar-nav me-3">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Usuario
+              </a>
+              <div class="dropdown-menu" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">Preferencias</a>
+                <a class="dropdown-item" onclick="logout()" href="./logout.php">Salir</a>
+              </div>
+            </li>
+          </ul>
+        <?php } else { // Si no existe la sesión 'usuario' 
+        ?>
+          <ul class="navbar-nav me-3">
+            <li class="nav-item">
+              <a class="nav-link" href="./login.php">Iniciar sesión</a>
+            </li>
+          </ul>
+        <?php } ?>
       </div>
     </nav>
   </header>
@@ -82,6 +99,9 @@ function theFooter()
   </footer>
 <?php
 }
+
+
+
 /**
  * Funcion que devuelve la fecha hora actual en formato dd/mm/AAAA HH24:mi:ss
  * @return type
@@ -145,12 +165,14 @@ function validarLoginUsuario($email, $password, $conexion, &$mensaje)
   $resultado = false;
 
   try {
-    $query = $conexion->prepare('SELECT `usu_email`,`usu_pass` FROM `usuario` WHERE `usu_email` =?');
+    $query = $conexion->prepare('SELECT `usu_email`,`usu_pass` FROM `usuario` WHERE `usu_email` = ?');
     $query->bindParam(1, $email);
     $query->execute();
     $count = $query->rowCount();
     if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+
       if ($row['usu_email'] == $email && password_verify($password, $row['usu_pass'])) {
+
         $resultado = true;
       } else {
         throw new Exception("Usuario o password incorrecto.");
@@ -168,6 +190,9 @@ function validarLoginUsuario($email, $password, $conexion, &$mensaje)
   }
   return $resultado;
 }
+
+
+
 /**
  * Comprueba si los datos son correctos para dar de alta un nuevo usuario
  * @param String $password
@@ -208,8 +233,9 @@ function insertarUsuario($nombre, $password, $email, $conexion, &$mensaje)
 
   $resultado = false;
   try {
-    // Generamos un password de una sola via con la funcion crypt(). Ingnoramos los warning que nos arroje con @ 
-    @$password_crypt = crypt($password, '$1$rasmusle$');
+
+    $password_crypt = password_hash($password, PASSWORD_DEFAULT);
+
     $query = $conexion->prepare('INSERT INTO `usuario` (`usu_nom`, `usu_email`, `usu_pass`, `usu_rol`) VALUES (?, ?, ?, 0 )');
     $query->bindParam(1, $nombre);
     $query->bindParam(2, $email);
@@ -230,63 +256,6 @@ function insertarUsuario($nombre, $password, $email, $conexion, &$mensaje)
   } catch (Exception $e) {
     $resultado = false;
     $mensaje = $e->getMessage();
-  }
-  return $resultado;
-}
-
-
-/*function insertarUsuario($login, $password, $email, $conexion, &$mensaje)
-{
-  $resultado = false;
-  try {
-
-
-    $bloqueado = 1;
-    // Generamos un password de una sola via con la funcion crypt(). Ingnoramos los warning que nos arroje con @ 
-    @$password_crypt = crypt($password);
-    $query = $conexion->prepare('INSERT INTO foreros (login, password, email, bloqueado) VALUES (?, ?, ?, ?)');
-    $query->bindParam(1, $login);
-    $query->bindParam(2, $password_crypt);
-    $query->bindParam(3, $email);
-    $query->bindParam(4, $bloqueado);
-
-    $rowcount = $query->execute();
-    if ($rowcount == 1) {
-      // Esperamos solo la insercion de 1 registro
-      $resultado = true;
-    } else {
-      // No se ha insertado
-      $resultado = false;
-    }
-  } catch (PDOException $e) {
-    $resultado = false;
-    $mensaje = $e->getMessage();
-  } catch (Exception $e) {
-    $resultado = false;
-    $mensaje = $e->getMessage();
-  }
-  return $resultado;
-}*/
-
-/**
- * Bloquea un usuario en la base de datos actualizando el campo bloqueado a 1
- * @param type $login
- * @param type $conexion
- * @param type $mensaje
- * @return boolean
- */
-function bloquearUsuario($login, $conexion)
-{
-  $resultado = false;
-  try {
-    $query = $conexion->prepare("UPDATE foreros SET bloqueado = 1 WHERE login = ?");
-    $query->bindParam(1, $login);
-    $rowcount = $query->execute();
-    $resultado = true;
-  } catch (PDOException $e) {
-    $resultado = false;
-  } catch (Exception $e) {
-    $resultado = false;
   }
   return $resultado;
 }
@@ -324,3 +293,15 @@ function buscarUsuarioEnBd($email, $conexion, &$mensaje)
   }
   return $objUsuario;
 }
+
+/**
+ * Función para rescatar la lista de las categorias desde la base de datos
+ */
+
+ function obtenerCategorias($conexion) {
+  $query = $conexion->prepare('SELECT * FROM categoria');
+  $query->execute();
+  $categorias = $query->fetchAll(PDO::FETCH_ASSOC);
+  return $categorias;
+}
+

@@ -33,7 +33,6 @@ body{
   
   #search-section .input-group {
     width: 100%;
-    max-width: 500px;
     margin: 0 auto;
   }
   .border-bottom{
@@ -61,3 +60,33 @@ body{
     margin-bottom: 0px !important;
   }
 
+
+ 
+
+.btn:hover{
+    color:#fff;
+}
+
+.input-text:focus{
+       
+  
+    box-shadow: 0px 0px 0px;
+    border-color:#2E5364;
+    outline: 0px;
+}
+
+.form-control {
+    border: 1px solid #2E5364;
+}
+.btn-outline-success {
+  color: #2E5364;
+  background-color: transparent;
+  background-image: none;
+  border-color: #2E5364;
+}
+.btn-outline-success :hover {
+  color: #2E5364;
+  background-color: transparent;
+  background-image: none;
+  border-color: #2E5364;
+}

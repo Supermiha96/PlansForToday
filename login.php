@@ -1,5 +1,6 @@
 <?php
 require_once "funciones.php";
+require_once 'conexion.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -19,7 +20,7 @@ require_once "funciones.php";
 	<link rel="stylesheet" type="text/css" href="./css/my-login.css">
 	<?php
 
-	if (isset($_POST['submit'])) {
+	if (isset($_POST['login-submit'])) {
 		$email = $_POST['email'];
 		$password = $_POST['password'];
 
@@ -34,9 +35,9 @@ require_once "funciones.php";
 				// Metemos el login de usuario en la sesi&oacute;n
 				$_SESSION['usuario'] = $email;
 				// Registramos la fecha hora de conexion
-				print "<p>hora conexion " . getNow() . "</p>";
+				//print "<p>hora conexion " . getNow() . "</p>";
 				$_SESSION['conexion'] = getNow();
-				header("Location: index.php");
+				header("refresh:1;url=index.php");
 			}
 		} else {
 			$mensaje = lanzarError("Debe rellenar los campos usuario y contraseña.");
@@ -60,7 +61,7 @@ require_once "funciones.php";
 					<div class="card fat">
 						<div class="card-body">
 							<h4 class="card-title">Iniciar Sesión</h4>
-							<form method="POST" class="my-login-validation" novalidate="">
+							<form method="POST" class="my-login-validation" action="<?php $_SERVER['PHP_SELF']; ?>">
 								<div class="form-group">
 									<label for="email">E-Mail</label>
 									<input id="email" type="email" class="form-control" name="email" value="<?php if (isset($_POST['email'])) echo $_POST['email'] ?>" required autofocus>
@@ -89,7 +90,7 @@ require_once "funciones.php";
 								</div>
 
 								<div class="form-group m-0">
-									<button type="submit" class="btn btn-primary btn-block">
+									<button type="submit" name="login-submit" class="btn btn-primary btn-block">
 										Iniciar Sesión
 									</button>
 								</div>

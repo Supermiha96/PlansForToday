@@ -23,6 +23,7 @@ require_once "funciones.php";
 
 <body>
     <?php
+    session_start(); // Iniciar la sesión
     theHeader();
     ?>
 
@@ -30,20 +31,35 @@ require_once "funciones.php";
 
     <section id="search-section">
         <div class="container">
-            <div class="row justify-content-center pb-md-5">
+            <div class="row justify-content-center pb-md-5 col-12 w-100">
 
                 <div class="row justify-content-center">
                     <div class="col-md-10 mt-5 text-center">
                         <h1 class="section-title mb-5">¡Descubre los mejores planes para hoy!</h1>
                         <p class="section-description">¿Quieres hacer algo divertido y diferente hoy? ¡Tenemos justo lo que necesitas! Explora nuestra selección de planes para hoy y descubre experiencias únicas que nunca olvidarás. Desde aventuras al aire libre hasta eventos culturales y gastronómicos, tenemos algo para todos los gustos y presupuestos. ¡No pierdas más tiempo y comienza a disfrutar de tu día con nosotros!</p>
                     </div>
-                    <div class="col-lg-10 col-md-12 mt-5 mb-md-5">
-                        <div class="input-group">
-                            <input type="text" class="form-control w-75" placeholder="Explora nuestros planes para ti">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">Buscar</button>
+                    <div class="col-12 mt-5 mb-md-5 w-100">
+
+                        <div class="container justify-content-center">
+
+                            <div class="row">
+
+                                <div class="col-md-12">
+
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control input-text" placeholder="Busca aquí la ciudad, para explorar sus planes...." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-success btn-lg" type="button"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
                             </div>
+
+
                         </div>
+
                     </div>
                 </div>
             </div>

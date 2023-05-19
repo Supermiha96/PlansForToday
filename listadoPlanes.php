@@ -1,5 +1,6 @@
 <?php
 require_once "funciones.php";
+require_once "conexion.php"
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -24,73 +25,62 @@ require_once "funciones.php";
 
 <body>
     <?php
+    session_start(); // Iniciar la sesión
     theHeader();
     ?>
-<main class="container-fluid mx-auto px-5 py-5">
+    <main class="container-fluid mx-auto px-5 py-5">
         <div class="row ">
 
-            <aside class="col-md-4  pe-3">
+            <aside class="col-md-4 pe-3">
                 <h4 class="mt-4">Categorías</h4>
                 <ul class="categoria md-text-center">
-                    <li><a class="oferta" href="#" target="_blank" rel="noopener noreferrer">Electrónica</a> </li>
-                    <li><a class="oferta" href="#" target="_blank" rel="noopener noreferrer">Gaming</a> </li>
-                    <li><a class="oferta" href="#" target="_blank" rel="noopener noreferrer">Supermercado</a></li>
-                    <li><a class="oferta" href="#" target="_blank" rel="noopener noreferrer">Moda y accesorios</a> </li>
-                    <li><a class="oferta" href="#" target="_blank" rel="noopener noreferrer">Salud y belleza</a></li>
-                    <li><a class="oferta" href="#" target="_blank" rel="noopener noreferrer">Jardín y bricolaje</a></li>
-                    <li><a class="oferta" href="#" target="_blank" rel="noopener noreferrer">Coches y motos</a></li>
+                    <?php
+                    $categorias = obtenerCategorias($conexion);
+                    foreach ($categorias as $categoria) {
+                        $nombre = $categoria['cat_nom'];
+                        echo '<li><a class="oferta" href="#" target="_blank" rel="noopener noreferrer">' . $nombre . '</a></li>';
+                    }
+                    ?>
                 </ul>
             </aside>
             <div class=" col-md-8 mx-auto">
                 <div class="row g-4">
-                    <div class="col-12 my-3">
-                        <div class="row bg-white desplazamiento ms-4">
-                            <div class="col-4 py-xl-2 d-flex align-items-center justify-content-center"><img
-                                    class="img-fluid max-heigth"
-                                    src="./img/ejemplo/imagenEjemplo.jpg"
-                                    alt=""></div>
-                            <div class="col-8 pt-3 pt-xl-5">
-                                <h4 class="">Silla Gaming Oficina Racing Sillon Gamer Racer X</h4>
-                                <h5>Profesional Videojuegos PC</h5>
-                                <p>Puntuación</p>
-                                
-                                <p><i class="fa-solid fa-truck-arrow-right"></i> Envio gratis</p>
-                                <a href="./plan.php"><button class="btn btn-outline-success mb-2">Ver el plan completo </button></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 my-3">
-                        <div class="row bg-white desplazamiento ms-4">
-                            <div class="col-4 py-xl-2 d-flex align-items-center justify-content-center"><img
-                                    class="img-fluid max-heigth"
-                                    src="./img/ejemplo/imagenEjemplo.jpg"
-                                    alt=""></div>
-                            <div class="col-8 pt-3 pt-xl-5">
-                                <h4 class="">Silla Gaming Oficina Racing Sillon Gamer Racer X</h4>
-                                <h5>Profesional Videojuegos PC</h5>
-                                <p>77,99 €</p>
-                                <p><i class="fa-solid fa-truck-arrow-right"></i>Envio gratis</p>
-                                <button class="btn btn-outline-success mb-2">Ir a la oferta</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 my-3">
-                        <div class="row bg-white desplazamiento ms-4">
-                            <div class="col-4 py-xl-2 d-flex align-items-center justify-content-center"><img
-                                    class="img-fluid max-heigth"
-                                    src="./img/ejemplo/imagenEjemplo.jpg"
-                                    alt=""></div>
-                            <div class="col-8 pt-3 pt-xl-5">
-                                <h4 class="">Silla Gaming Oficina Racing Sillon Gamer Racer X</h4>
-                                <h5>Profesional Videojuegos PC</h5>
-                                <p>77,99 €</p>
-                                <p><i class="fa-solid fa-truck-arrow-right"></i>Envio gratis</p>
-                                <button class="btn btn-outline-success mb-2 showmodal" data-show-modal="myModal">Ir a la oferta</button>
-                                <a href="myModal"></a>
-                            </div>
-                        </div>
-                    </div>
-                    
+                    <?php // Realizar la consulta a la base de datos para obtener los planes
+
+
+                    $query = "SELECT * FROM post";
+                    $result = $conexion->query($query);
+
+                    // Verificar si se obtuvieron resultados
+                    if ($result->rowCount() > 0) {
+                        // Recorrer los resultados y generar el contenido de cada post
+                        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                            $titulo = $row['post_tit'];
+                            $descripcion = $row['post_desc'];
+                            $precio = $row['post_pre'];
+
+                            // Generar el código HTML del post utilizando los datos obtenidos
+                            echo '
+    <div class="col-12 my-3">
+      <div class="row bg-white desplazamiento ms-4">
+        <div class="col-4 py-xl-2 d-flex align-items-center justify-content-center">
+          <img class="img-fluid max-heigth" src="./img/ejemplo/imagenEjemplo.jpg" alt="">
+        </div>
+        <div class="col-8 pt-3 pt-xl-5">
+          <h4>' . $titulo . '</h4>
+          <h5>' . $descripcion . '</h5>
+          <p>Puntuación</p>
+          <p><i class="fa-solid fa-truck-arrow-right"></i> ' . $precio . '</p>
+          <a href="./plan.php"><button class="btn btn-outline-success mb-2">Ver el plan completo</button></a>
+        </div>
+      </div>
+    </div>';
+                        }
+                    } else {
+                        echo "No se encontraron planes.";
+                    }
+                    ?>
+
                 </div>
             </div>
         </div>
