@@ -21,10 +21,10 @@ require_once 'conexion.php';
 	<?php
 
 	/**
-         * -------------------------------------
-         * ---------- NUEVO USUARIO ------------
-         * -------------------------------------
-         */
+	 * -------------------------------------
+	 * ---------- NUEVO USUARIO ------------
+	 * -------------------------------------
+	 */
 
 	if (isset($_POST['new-user-submit'])) {
 
@@ -39,7 +39,7 @@ require_once 'conexion.php';
 		// Validamos los campos
 		if (validarNuevoUsuario($password, $password_confirm, $email, $mensaje)) {
 			// Comprobamos que el usuario no exista en bbdd
-		$objUsuario = buscarUsuarioEnBd($email, $conexion, $mensaje);
+			$objUsuario = buscarUsuarioEnBd($email, $conexion, $mensaje);
 			if ($objUsuario == null) {
 				if (insertarUsuario($nombre, $password, $email, $conexion, $mensaje)) {
 					// Alta en bbdd correcta!
@@ -61,13 +61,13 @@ require_once 'conexion.php';
 	theHeader();
 	echo $mensaje;
 	?>
-	
+
 
 	<section class="h-100 ">
 		<div class="container h-100 ">
-			
+
 			<div class="row justify-content-md-center h-100">
-				
+
 				<div class="card-wrapper  mt-4">
 					<div class="brand">
 						<img src="img/logos/7.svg" alt="bootstrap 4 login page">
@@ -78,7 +78,7 @@ require_once 'conexion.php';
 							<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" class="my-login-validation" novalidate="">
 								<div class="form-group">
 									<label for="name">Nombre</label>
-									<input id="name" type="text" class="form-control" name="name" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>"required autofocus>
+									<input id="name" type="text" class="form-control" name="name" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>" required autofocus>
 									<div class="invalid-feedback">
 										¿Como te llamas?
 									</div>
@@ -125,7 +125,7 @@ require_once 'conexion.php';
 								<div class="mt-4 text-center">
 									¿Ya tienes cuenta? <a href="login.php">Inicia Sesión</a>
 								</div>
-								
+
 							</form>
 						</div>
 					</div>
@@ -137,9 +137,10 @@ require_once 'conexion.php';
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	<script src="./js/my-login.js"></script>
+	<?php
+	theFooter();
+	?>
 </body>
-<?php
-theFooter();
-?>
+
 
 </html>

@@ -25,19 +25,16 @@ function theHeader()
           <li class="nav-item">
             <a class="nav-link" href="#">Acerca de</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contacto</a>
-          </li>
         </ul>
 
         <?php if (isset($_SESSION['usuario'])) { // Verificar si existe la sesión 'usuario' 
         ?>
-          <ul class="navbar-nav me-3">
+          <ul class="navbar-nav">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Usuario
               </a>
-              <div class="dropdown-menu" aria-labelledby="userDropdown">
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">Preferencias</a>
                 <a class="dropdown-item" onclick="logout()" href="./logout.php">Salir</a>
               </div>
@@ -273,7 +270,7 @@ function buscarUsuarioEnBd($email, $conexion, &$mensaje)
   $objUsuario = null;
   try {
 
-    $query = $conexion->prepare("SELECT `usu_nom`,`usu_pass`,`usu_email` FROM `usuario` WHERE `usu_email` =  ?");
+    $query = $conexion->prepare("SELECT `usu_id`,`usu_nom`,`usu_pass`,`usu_email` FROM `usuario` WHERE `usu_email` =  ?");
     $query->bindParam(1, $email);
     $query->execute();
 
@@ -298,10 +295,133 @@ function buscarUsuarioEnBd($email, $conexion, &$mensaje)
  * Función para rescatar la lista de las categorias desde la base de datos
  */
 
- function obtenerCategorias($conexion) {
+function obtenerCategorias($conexion)
+{
   $query = $conexion->prepare('SELECT * FROM categoria');
   $query->execute();
   $categorias = $query->fetchAll(PDO::FETCH_ASSOC);
   return $categorias;
 }
 
+function obtenerPosts($conexion)
+{
+  $postId = $_GET['planId'];
+  $query = $conexion->prepare('SELECT * FROM post WHERE post_id =  ?');
+  $query->bindParam(1, $postId);
+  $query->execute();
+  $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+  return $resultados;
+}
+
+
+function obtenerPlanesDestacados($conexion)
+{
+  // Obtener el número total de planes
+  $queryTotalPlanes = "SELECT COUNT(*) as total FROM post";
+  $stmtTotalPlanes = $conexion->prepare($queryTotalPlanes);
+  $stmtTotalPlanes->execute();
+  $resultTotalPlanes = $stmtTotalPlanes->fetch(PDO::FETCH_ASSOC);
+  $totalPlanes = $resultTotalPlanes['total'];
+
+  $destacados = array();
+
+  // Verificar si hay menos de 3 planes disponibles
+  if ($totalPlanes <= 3) {
+    // Obtener todos los planes
+    $queryPlanes = "SELECT p.post_id,p.post_tit,p.post_desc,c.ciu_nom FROM post p JOIN ciudad c ON p.ciu_cod = c.ciu_id";
+    $stmtPlanes = $conexion->prepare($queryPlanes);
+    $stmtPlanes->execute();
+    $destacados = $stmtPlanes->fetchAll(PDO::FETCH_ASSOC);
+  } else {
+    // Generar números aleatorios únicos para los planes destacados
+    while (count($destacados) < 3) {
+      $numero = rand(1, $totalPlanes);
+      $queryPlan = "SELECT p.post_id,p.post_tit,p.post_desc,c.ciu_nom FROM post p JOIN ciudad c ON p.ciu_cod = c.ciu_id WHERE c.post_id = :post_id";
+      $stmtPlan = $conexion->prepare($queryPlan);
+      $stmtPlan->bindParam(':post_id', $numero, PDO::PARAM_INT);
+      $stmtPlan->execute();
+      $resultPlan = $stmtPlan->fetch(PDO::FETCH_ASSOC);
+      if ($resultPlan) {
+        $destacados[] = $resultPlan;
+      }
+    }
+  }
+
+  return $destacados;
+}
+
+
+function obtenerComentarios($conexion, $postId)
+{
+  $query = "SELECT * FROM post JOIN comentario ON comentario.post_cod = post.post_id JOIN usuario ON comentario.usu_cod = usuario.usu_id WHERE post_cod = :postId";
+  $stmt = $conexion->prepare($query);
+  $stmt->bindParam(':postId', $postId);
+  $stmt->execute();
+
+  $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  return $comments;
+}
+
+function agregarComentario($conexion, $postId, $usuarioId, $titulo, $cuerpo, $puntuacion)
+{
+  $resultado = false;
+  try {
+    $query = "INSERT INTO comentario (com_tit, com_cuer, com_punt, com_fec, usu_cod, post_cod) VALUES (:titulo, :cuerpo, :puntuacion, CURDATE(), :usuarioId, :postId)";
+    $stmt = $conexion->prepare($query);
+    $stmt->bindParam(':titulo', $titulo);
+    $stmt->bindParam(':cuerpo', $cuerpo);
+    $stmt->bindParam(':puntuacion', $puntuacion);
+    $stmt->bindParam(':usuarioId', $usuarioId);
+    $stmt->bindParam(':postId', $postId);
+
+    $stmt->execute();
+
+    $rowcount = $stmt->rowCount();
+    if ($rowcount == 1) {
+      // Se insertó correctamente
+      $resultado = true;
+    } else {
+      // No se ha insertado
+      $resultado = false;
+    }
+  } catch (PDOException $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+    // Manejo de error de PDO
+  } catch (Exception $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+    // Manejo de otro tipo de error
+  }
+  return $resultado;
+}
+function eliminarComentario($conexion, $comentarioId)
+{
+  $query = "DELETE FROM comentario WHERE com_id = :comentarioId";
+  $stmt = $conexion->prepare($query);
+  $stmt->bindParam(':comentarioId', $comentarioId);
+  $stmt->execute();
+}
+
+function calcularPuntuacionMedia($comments)
+{
+  $totalPuntuacion = 0;
+  $cantidadComentarios = count($comments);
+
+  foreach ($comments as $comment) {
+    // Verificar si la clave 'puntuacion' está definida en el comentario
+    if (isset($comment['com_punt'])) {
+      // Convertir la puntuacion a un entero antes de sumarla
+      $puntuacion = intval($comment['com_punt']);
+      $totalPuntuacion += $puntuacion;
+    }
+  }
+
+  // Calcular la puntuacion media solo si hay comentarios
+  $puntuacionMedia = $cantidadComentarios > 0 ? $totalPuntuacion / $cantidadComentarios : 0;
+
+  // Redondear la puntuacion media a 2 decimales
+  $puntuacionMedia = round($puntuacionMedia, 2);
+
+  return $puntuacionMedia;
+}

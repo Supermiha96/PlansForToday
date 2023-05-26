@@ -66,7 +66,11 @@ box-shadow: 0px 0px 22px 0px rgba(92,92,92,1);
     width: 100%;
   }
 
-  @media (min-width:1400px) {
+  .btn-outline-success{
+    color: #2E5364;
+    border-color: #2E5364;
+  }
+  @media (min-width:1000px) {
     aside{
         max-width: 300px !important;
     }
