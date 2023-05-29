@@ -58,7 +58,7 @@ require_once 'conexion.php';
 
 <body class="my-login-page">
 	<?php
-	theHeader();
+	theHeader($conexion);
 	echo $mensaje;
 	?>
 

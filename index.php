@@ -28,7 +28,8 @@ require_once 'conexion.php';
 <body>
     <?php
     session_start(); // Iniciar la sesión
-    theHeader();
+    theHeader($conexion);
+    echo $mensaje;
     ?>
 
 
@@ -114,10 +115,21 @@ require_once 'conexion.php';
             <div class="row">
                 <?php
                 $destacados = obtenerPlanesDestacados($conexion);
+                
                 foreach ($destacados as $plan) {
+                    $imagenes = obtenerImagenes($conexion, $plan['post_id']);
+
+                    if (!empty($imagenes)) {
+                        // Obtener una imagen aleatoria de la lista
+                        $imagenAleatoria = $imagenes[array_rand($imagenes)];
+                        $imagenUrl = $imagenAleatoria['img_url'];
+                    } else {
+                        // Si no hay imágenes, mostrar una imagen por defecto
+                        $imagenUrl = './img/ejemplo/imagenEjemplo.jpg';
+                    }
                     echo '<div class="col-lg-4 mb-4">';
                     echo '<div class="card">';
-                    echo '<img src="https://images.unsplash.com/photo-1477862096227-3a1bb3b08330?ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60" class="card-img-top" alt="...">';
+                    echo '<img src="'.$imagenUrl.'" class="card-img-top" alt="'.$imagenUrl.'">';
                     echo '<div class="card-body">';
                     echo '<h5 class="card-title">' . $plan['post_tit'] . '</h5>';
                     echo '<p class="card-text">' . $plan['post_desc'] . '</p>';
@@ -128,11 +140,13 @@ require_once 'conexion.php';
                 }
                 ?>
 
+            </div>
+        </div>
+    </section>
 
-
-                <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 <?php
 theFooter();

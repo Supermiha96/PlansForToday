@@ -1,10 +1,23 @@
 <?php
+require_once "conexion.php";
 
 
-function theHeader()
+function theHeader($conexion)
 {
-
+  if (isset($_SESSION['usuario'])) {
+    $objUsuario = buscarUsuarioEnBd($_SESSION['usuario'], $conexion, $mensaje);
+    $nombre = isset($_POST['nombre']) ? $_POST['nombre'] : $objUsuario['usu_nom'];
+    $apellidos = isset($_POST['apellidos']) ? $_POST['apellidos'] : $objUsuario['usu_apes'];
+    $email = isset($_POST['email']) ? $_POST['email'] : $objUsuario['usu_email'];
+    $telefono = isset($_POST['telefono']) ? $_POST['telefono'] : $objUsuario['usu_tel'];
+    $ciudad = isset($_POST['ciudad']) ? $_POST['ciudad'] : $objUsuario['usu_ciu'];
+    $pais = isset($_POST['pais']) ? $_POST['pais'] : $objUsuario['usu_pais'];
+  }
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ActualizarUsuario'])) {
+    actualizarUsuario($conexion, $_SESSION['usuario'], $nombre, $apellidos, $email, $telefono, $ciudad, $pais);
+  }
 ?>
+
 
   <header class="border-bottom">
 
@@ -32,10 +45,10 @@ function theHeader()
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Usuario
+                <i class="fa-solid fa-user"></i>
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">Preferencias</a>
+                <a class="dropdown-item" href="" data-toggle="modal" data-target="#actualizarDatosUsuarioModal">Preferencias</a>
                 <a class="dropdown-item" onclick="logout()" href="./logout.php">Salir</a>
               </div>
             </li>
@@ -50,6 +63,55 @@ function theHeader()
         <?php } ?>
       </div>
     </nav>
+
+    <div class="modal fade" id="actualizarDatosUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="agregarPostModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="agregarPostModalLabel">Prefencias</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="agregarPostForm" method="POST" action="">
+              <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo isset($objUsuario['usu_nom']) ? $objUsuario['usu_nom'] : ''; ?>" required></input>
+                <div class="invalid-feedback">Por favor, ingresa un nombre.</div>
+              </div>
+              <div class="form-group">
+                <label for="apellidos">Apellidos</label>
+                <input class="form-control" id="apellidos" name="apellidos" value="<?php echo isset($objUsuario['usu_apes']) ? $objUsuario['usu_apes'] : ''; ?>"></input>
+                <div class="invalid-feedback">Por favor, ingresa apellidos.</div>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" id="email" name="email" value="<?php echo isset($objUsuario['usu_email']) ? $objUsuario['usu_email'] : '';  ?>" required></input>
+                <div class="invalid-feedback">Por favor, ingresa el email.</div>
+              </div>
+              <div class="form-group">
+                <label for="telefono">Telefono</label>
+                <input class="form-control" id="telefono" name="telefono" value="<?php echo isset($objUsuario['usu_tel']) ? $objUsuario['usu_tel'] : '';  ?>"></input>
+                <div class="invalid-feedback">Por favor, ingresa el telefono.</div>
+              </div>
+
+              <div class="form-group">
+                <label for="ciudad">Ciudad</label>
+                <input class="form-control" id="ciudad" name="ciudad" value="<?php echo isset($objUsuario['usu_ciu']) ? $objUsuario['usu_ciu'] : '';  ?>"></input>
+                <div class="invalid-feedback">Por favor, ingresa el ciudad.</div>
+              </div>
+              <div class="form-group">
+                <label for="pais">Pais</label>
+                <input class="form-control" id="pais" name="pais" value="<?php echo isset($objUsuario['usu_pais']) ? $objUsuario['usu_pais'] : '';  ?>" required></input>
+                <div class="invalid-feedback">Por favor, ingresa el pais.</div>
+              </div>
+              <button type="submit" name="ActualizarUsuario" class="btn btn-primary">Actualizar datos</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </header>
 <?php
 }
@@ -270,7 +332,7 @@ function buscarUsuarioEnBd($email, $conexion, &$mensaje)
   $objUsuario = null;
   try {
 
-    $query = $conexion->prepare("SELECT `usu_id`,`usu_nom`,`usu_pass`,`usu_email` FROM `usuario` WHERE `usu_email` =  ?");
+    $query = $conexion->prepare("SELECT * FROM `usuario` WHERE `usu_email` =  ?");
     $query->bindParam(1, $email);
     $query->execute();
 
@@ -291,6 +353,88 @@ function buscarUsuarioEnBd($email, $conexion, &$mensaje)
   return $objUsuario;
 }
 
+function buscarUsuarioEnBdPorId($usuId, $conexion, &$mensaje)
+{
+
+  $objUsuario = null;
+  try {
+
+    $query = $conexion->prepare("SELECT * FROM `usuario` WHERE `usu_id` =  ?");
+    $query->bindParam(1, $usuId);
+    $query->execute();
+
+    if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+      $objUsuario = $row;
+    }
+
+    $query->closeCursor();
+  } catch (PDOException $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+    die();
+  } catch (Exception $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+    die();
+  }
+  return $objUsuario;
+}
+function buscarCiudadPorId($conexion, $ciu_id, &$mensaje)
+{
+  $objCiudad = null;
+  try {
+
+    $query = $conexion->prepare("SELECT * FROM `ciudad` WHERE `ciu_id` =  ?");
+    $query->bindParam(1, $ciu_id);
+    $query->execute();
+
+    if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+      $objCiudad = $row;
+    }
+
+    $query->closeCursor();
+  } catch (PDOException $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+    die();
+  } catch (Exception $e) {
+    $resultado = false;
+    $mensaje = $e->getMessage();
+    die();
+  }
+  return $objCiudad;
+}
+
+
+function actualizarUsuario($conexion, $usuarioEmail, $nombre, $apellidos, $email, $telefono, $ciudad, $pais)
+{
+  try {
+    // Preparar la consulta SQL
+    $query = "UPDATE usuario SET usu_nom = :nombre, usu_apes = :apellidos, usu_email = :email, usu_tel = :telefono, usu_ciu = :ciudad, usu_pais = :pais WHERE usu_email = :usuarioEmail";
+    $stmt = $conexion->prepare($query);
+
+    // Asignar los valores de los parámetros
+    $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+    $stmt->bindParam(':apellidos', $apellidos, PDO::PARAM_STR);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->bindParam(':telefono', $telefono, PDO::PARAM_STR);
+    $stmt->bindParam(':ciudad', $ciudad, PDO::PARAM_STR);
+    $stmt->bindParam(':pais', $pais, PDO::PARAM_STR);
+    $stmt->bindParam(':usuarioEmail', $usuarioEmail, PDO::PARAM_STR);
+
+    // Ejecutar la consulta
+    $stmt->execute();
+
+    // Verificar si se actualizó al menos una fila
+    if ($stmt->rowCount() > 0) {
+      lanzarExito("Usuario actualizado con exito.");
+    } else {
+      lanzarError("No se ha podido realizar la actualizazación del usuario."); // No se encontró el usuario o no se realizó ninguna actualización
+    }
+  } catch (PDOException $e) {
+    lanzarError("Error al actualizar el usuario: " . $e->getMessage());
+  }
+}
 /**
  * Función para rescatar la lista de las categorias desde la base de datos
  */
@@ -302,12 +446,26 @@ function obtenerCategorias($conexion)
   $categorias = $query->fetchAll(PDO::FETCH_ASSOC);
   return $categorias;
 }
-
-function obtenerPosts($conexion)
+function obtenerCiudades($conexion)
 {
-  $postId = $_GET['planId'];
+  try {
+    $query = $conexion->prepare("SELECT * FROM ciudad");
+    $query->execute();
+    $ciudades = $query->fetchAll(PDO::FETCH_ASSOC);
+    return $ciudades;
+  } catch (PDOException $e) {
+    // Manejo de errores - puedes personalizarlo según tus necesidades
+    echo "Error al obtener las ciudades: " . $e->getMessage();
+    exit;
+  }
+}
+
+
+
+function obtenerPlan($conexion, $planId)
+{
   $query = $conexion->prepare('SELECT * FROM post WHERE post_id =  ?');
-  $query->bindParam(1, $postId);
+  $query->bindParam(1, $planId);
   $query->execute();
   $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
   return $resultados;
@@ -316,29 +474,31 @@ function obtenerPosts($conexion)
 
 function obtenerPlanesDestacados($conexion)
 {
-  // Obtener el número total de planes
-  $queryTotalPlanes = "SELECT COUNT(*) as total FROM post";
-  $stmtTotalPlanes = $conexion->prepare($queryTotalPlanes);
-  $stmtTotalPlanes->execute();
-  $resultTotalPlanes = $stmtTotalPlanes->fetch(PDO::FETCH_ASSOC);
-  $totalPlanes = $resultTotalPlanes['total'];
+  // Obtener todos los IDs de los posts
+  $queryIDs = "SELECT post_id FROM post";
+  $stmtIDs = $conexion->prepare($queryIDs);
+  $stmtIDs->execute();
+  $resultIDs = $stmtIDs->fetchAll(PDO::FETCH_ASSOC);
+
+  $ids = array_column($resultIDs, 'post_id');
 
   $destacados = array();
 
-  // Verificar si hay menos de 3 planes disponibles
-  if ($totalPlanes <= 3) {
+  // Verificar si hay menos de 3 posts disponibles
+  if (count($ids) <= 3) {
     // Obtener todos los planes
-    $queryPlanes = "SELECT p.post_id,p.post_tit,p.post_desc,c.ciu_nom FROM post p JOIN ciudad c ON p.ciu_cod = c.ciu_id";
+    $queryPlanes = "SELECT p.post_id, p.post_tit, p.post_desc, c.ciu_nom FROM post p JOIN ciudad c ON p.ciu_cod = c.ciu_id";
     $stmtPlanes = $conexion->prepare($queryPlanes);
     $stmtPlanes->execute();
     $destacados = $stmtPlanes->fetchAll(PDO::FETCH_ASSOC);
   } else {
     // Generar números aleatorios únicos para los planes destacados
-    while (count($destacados) < 3) {
-      $numero = rand(1, $totalPlanes);
-      $queryPlan = "SELECT p.post_id,p.post_tit,p.post_desc,c.ciu_nom FROM post p JOIN ciudad c ON p.ciu_cod = c.ciu_id WHERE c.post_id = :post_id";
+    $randomIndices = array_rand($ids, 3);
+    foreach ($randomIndices as $index) {
+      $postId = $ids[$index];
+      $queryPlan = "SELECT p.post_id, p.post_tit, p.post_desc, c.ciu_nom FROM post p JOIN ciudad c ON p.ciu_cod = c.ciu_id WHERE p.post_id = :post_id";
       $stmtPlan = $conexion->prepare($queryPlan);
-      $stmtPlan->bindParam(':post_id', $numero, PDO::PARAM_INT);
+      $stmtPlan->bindParam(':post_id', $postId, PDO::PARAM_INT);
       $stmtPlan->execute();
       $resultPlan = $stmtPlan->fetch(PDO::FETCH_ASSOC);
       if ($resultPlan) {
@@ -349,6 +509,29 @@ function obtenerPlanesDestacados($conexion)
 
   return $destacados;
 }
+// Función para eliminar un post
+function eliminarPost($conexion, $post_id)
+{
+  try {
+
+    if ($conexion && $post_id) {
+
+      $query = "DELETE FROM post WHERE post_id = :post_id";
+      $stmt = $conexion->prepare($query);
+      $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
+      $stmt->execute();
+    } else {
+      // Datos inválidos proporcionados
+      throw new Exception("Datos inválidos");
+    }
+  } catch (Exception $e) {
+    // Manejo de errores
+    lanzarError("Error: " . $e->getMessage());
+    return false;
+  }
+}
+
+
 
 
 function obtenerComentarios($conexion, $postId)
@@ -364,9 +547,8 @@ function obtenerComentarios($conexion, $postId)
 
 function agregarComentario($conexion, $postId, $usuarioId, $titulo, $cuerpo, $puntuacion)
 {
-  $resultado = false;
   try {
-    $query = "INSERT INTO comentario (com_tit, com_cuer, com_punt, com_fec, usu_cod, post_cod) VALUES (:titulo, :cuerpo, :puntuacion, CURDATE(), :usuarioId, :postId)";
+    $query = "INSERT INTO `comentario`  (`com_id`, `com_tit`, `com_cuer`, `com_punt`, `com_fec`, `usu_cod`, `post_cod`) VALUES (NULL,:titulo, :cuerpo, :puntuacion, CURDATE(), :usuarioId, :postId)";
     $stmt = $conexion->prepare($query);
     $stmt->bindParam(':titulo', $titulo);
     $stmt->bindParam(':cuerpo', $cuerpo);
@@ -376,25 +558,21 @@ function agregarComentario($conexion, $postId, $usuarioId, $titulo, $cuerpo, $pu
 
     $stmt->execute();
 
-    $rowcount = $stmt->rowCount();
-    if ($rowcount == 1) {
-      // Se insertó correctamente
-      $resultado = true;
+    $rowCount = $stmt->rowCount();
+    if ($rowCount == 1) {
+      lanzarExito("Se ha agregado el comentario exitosamente");
     } else {
-      // No se ha insertado
-      $resultado = false;
+      lanzarError("No se pudo agregar el comentario");
     }
   } catch (PDOException $e) {
-    $resultado = false;
-    $mensaje = $e->getMessage();
+    lanzarError($e->getMessage());
     // Manejo de error de PDO
   } catch (Exception $e) {
-    $resultado = false;
-    $mensaje = $e->getMessage();
+    lanzarError($e->getMessage());
     // Manejo de otro tipo de error
   }
-  return $resultado;
 }
+
 function eliminarComentario($conexion, $comentarioId)
 {
   $query = "DELETE FROM comentario WHERE com_id = :comentarioId";
@@ -424,4 +602,48 @@ function calcularPuntuacionMedia($comments)
   $puntuacionMedia = round($puntuacionMedia, 2);
 
   return $puntuacionMedia;
+}
+function registrarImagen($conexion, $imagen_url, $id_plan,$usuarioId)
+{
+  try {
+    // Preparar la consulta SQL
+    $sql = "INSERT INTO `imagenes` (`img_id`, `img_url`, `id_post`, `id_usu`) VALUES (NULL, :img_url, :id_post, :id_usu)";
+
+    // Preparar la declaración
+    $stmt = $conexion->prepare($sql);
+
+    // Vincular los parámetros con los valores
+    $stmt->bindParam(':img_url', $imagen_url);
+    $stmt->bindParam(':id_post', $id_plan);
+    $stmt->bindParam(':id_usu', $usuarioId);
+
+    // Ejecutar la consulta
+    $stmt->execute();
+  } catch (PDOException $e) {
+    // Error al ejecutar la consulta
+    echo "Error: " . $e->getMessage();
+  }
+}
+
+function obtenerImagenes($conexion, $planId)
+{
+  try {
+    // Preparar la consulta SQL
+    $query = $conexion->prepare('SELECT img_url FROM imagenes WHERE id_post = ?');
+    $query->bindParam(1, $planId);
+
+    // Ejecutar la consulta
+    $query->execute();
+
+    // Obtener los resultados como un array asociativo
+    $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    return $resultados;
+  } catch (PDOException $e) {
+    // Manejo de error de PDO
+    lanzarError($e->getMessage());
+  } catch (Exception $e) {
+    // Manejo de otro tipo de error
+    lanzarError($e->getMessage());
+  }
 }

@@ -4,10 +4,13 @@ require_once 'conexion.php';
 session_start();
 
 $city = $_GET['city'];
-$resultados = obtenerPosts($conexion);
+$planId = $_GET['planId'];
+
+// Obtener los posts usando una consulta preparada
+$ObjPlan = obtenerPlan($conexion, $planId);
 
 // Recorrer los resultados y mostrar los posts
-foreach ($resultados as $row) {
+foreach ($ObjPlan as $row) {
     $post_id = $row['post_id'];
     $post_tit = $row['post_tit'];
     $post_desc = $row['post_desc'];
@@ -15,7 +18,9 @@ foreach ($resultados as $row) {
     $post_pre = $row['post_pre'];
     $post_addr = $row['post_addr'];
 }
+
 $postCiudad = $_GET['city'];
+
 if (isset($_POST['añadirComentario'])) {
     $objUsuario = buscarUsuarioEnBd($_SESSION['usuario'], $conexion, $mensaje);
     $resutado = false;
@@ -25,7 +30,8 @@ if (isset($_POST['añadirComentario'])) {
     $contenido = $_POST['contenido'];
     $usuarioId = $objUsuario['usu_id'];
 
-    agregarComentario($conexion, $post_id, $usuarioId, $titulo, $contenido, $puntuacion);
+    // Agregar comentario usando una consulta preparada
+    agregarComentario($conexion, $planId, $usuarioId, $titulo, $contenido, $puntuacion);
 }
 ?>
 
@@ -63,7 +69,8 @@ if (isset($_POST['añadirComentario'])) {
 <body>
     <?php
 
-    theHeader();
+    theHeader($conexion);
+    echo $mensaje;
     ?>
 
     <main class="text-black fondo">
@@ -74,25 +81,17 @@ if (isset($_POST['añadirComentario'])) {
 
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <img src="https://cdn.pixabay.com/photo/2023/05/16/13/02/zebra-spider-7997505__340.jpg" alt="Imagen 1">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="https://cdn.pixabay.com/photo/2023/05/21/10/03/flower-8008187__340.jpg" alt="Imagen 2">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="https://cdn.pixabay.com/photo/2023/05/16/00/47/birds-7996283__340.jpg" alt="Imagen 3">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="https://cdn.pixabay.com/photo/2023/05/16/13/02/zebra-spider-7997505__340.jpg" alt="Imagen 1">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="https://cdn.pixabay.com/photo/2023/05/21/10/03/flower-8008187__340.jpg" alt="Imagen 2">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="https://cdn.pixabay.com/photo/2023/05/16/00/47/birds-7996283__340.jpg" alt="Imagen 3">
-                            </div>
-                            <!-- Agrega más diapositivas según sea necesario -->
+                            <?php
+                            // Obtener las URL de las imágenes desde la base de datos
+                            $imagenes = obtenerImagenes($conexion, $post_id); // Supongamos que tienes una función obtenerImagenes() que devuelve un array con las URL de las imágenes
+
+                            // Generar los elementos div con las imágenes dinámicamente
+                            foreach ($imagenes as $imagen) {
+                                echo '<div class="swiper-slide">';
+                                echo '<img src="' . $imagen['img_url'] . '" alt="Imagen">';
+                                echo '</div>';
+                            }
+                            ?>
                         </div>
                         <div class="swiper-pagination"></div>
                         <div class="swiper-button-next"></div>
@@ -253,32 +252,35 @@ if (isset($_POST['añadirComentario'])) {
 
 
                 if (isset($_SESSION['usuario'])) {
-                    echo '<div class="col-md-8" id="nuevoComentario">
-                 <div class="media g-mb-30 media-comment">
-                     <img class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Image Description">
-                     <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
-                     <h3 class="pull-left">Introduce un comentario</h3>
-                         <form id="comentarioUsuario" method="post" action="">
-
-
-                             <fieldset>
-                                 <div class="row">
-                                     <div class="form-group col-xs-12 col-sm-9 col-lg-10">
-                                         <input type="text" name="titulo" placeholder="Título" required>
-                                     </div>
-                                     <div class="form-group col-xs-12 col-sm-9 col-lg-10">
-                                         <input type="number" name="puntuacion" min="1" max="10" placeholder="Tu puntuación para este plan" required>
-                                     </div>
-                                     <div class="form-group col-xs-12 col-sm-9 col-lg-10">
-                                         <textarea class="form-control" name="contenido" id="message" placeholder="Contenido del comentario..." required=""></textarea>
-                                     </div>
-                                 </div>
-                             </fieldset>
-                             <button type="submit" name="añadirComentario" class="btn btn-normal pull-right">Añadir comentario</button>
-                         </form>
-                     </div>
-                 </div>
-             </div>';
+                    echo ' <div class="col-md-8" id="nuevoComentario">
+                    <div class="media g-mb-30 media-comment">
+                        <img class="d-flex g-width-50 g-height-50 rounded-circle g-mt-3 g-mr-15" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Image Description">
+                        <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                            <h3 class="pull-left">Introduce un comentario</h3>
+                            <form id="comentarioUsuario" method="post" action="">
+        
+        
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="form-group col-xs-12 col-sm-9 col-lg-10">
+                                        <label for="titulo">Titulo para tu comentario</label></br>
+                                            <input type="text" name="titulo" placeholder="Título" required>
+                                        </div>
+                                        <div class="form-group col-2 col-sm-9 col-lg-10">
+                                        <label for="puntuacion">Tu puntuación para este plan sobre 10</label></br>
+                                            <input type="number" name="puntuacion" min="1" max="10" required>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-sm-9 col-lg-10">
+                                        <label for="contenido">Contenido del comentario...</label>
+                                            <textarea class="form-control" name="contenido" id="message" placeholder="Contenido del comentario..." required=""></textarea>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <button type="submit" name="añadirComentario" class="btn btn-normal pull-right">Añadir comentario</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>';
                 }
 
 
