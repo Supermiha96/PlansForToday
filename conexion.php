@@ -24,9 +24,9 @@ return $conexion;
 /*
 function conectarConBD()
 {
-    $host_name = 'db5013056405.hosting-data.io';
-    $database = 'dbs10962471';
-    $user_name = 'dbu3049804';
+    $host_name = 'db5013208083.hosting-data.io';
+    $database = 'dbs11081996';
+    $user_name = 'dbu595633';
     $password = 'PlansForToday';
     $dbh = null;
 

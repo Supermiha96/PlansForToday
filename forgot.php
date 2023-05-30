@@ -1,6 +1,22 @@
 <?php
 require_once "funciones.php";
+
+
+
+
+if (isset($_POST['email'])) {
+	$email = $_POST['email'];
+	$contraseña = 'contraseña_del_usuario';
+
+	if (enviarCorreoRecuperarContraseña($email, $contraseña)) {
+		$mensaje = lanzarExito('Correo electrónico enviado con éxito.');
+	} else {
+		$mensaje = lanzarError('Error al enviar el correo electrónico.');
+	}
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -25,7 +41,8 @@ require_once "funciones.php";
 <body class="my-login-page">
 
 	<?php
-	theHeader();
+	theHeader($conexion);
+	echo $mensaje;
 	?>
 	<section class="h-100">
 		<div class="container h-100">
@@ -61,7 +78,6 @@ require_once "funciones.php";
 			</div>
 		</div>
 	</section>
-
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="js/my-login.js"></script>

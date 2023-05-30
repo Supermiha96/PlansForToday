@@ -1,6 +1,14 @@
 <?php
 require_once "conexion.php";
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Cargar la biblioteca PHPMailer
+require './PHPMailer/src/Exception.php';
+require './PHPMailer/src/PHPMailer.php';
+require './PHPMailer/src/SMTP.php';
+
 
 function theHeader($conexion)
 {
@@ -603,7 +611,7 @@ function calcularPuntuacionMedia($comments)
 
   return $puntuacionMedia;
 }
-function registrarImagen($conexion, $imagen_url, $id_plan,$usuarioId)
+function registrarImagen($conexion, $imagen_url, $id_plan, $usuarioId)
 {
   try {
     // Preparar la consulta SQL
@@ -645,5 +653,33 @@ function obtenerImagenes($conexion, $planId)
   } catch (Exception $e) {
     // Manejo de otro tipo de error
     lanzarError($e->getMessage());
+  }
+}
+
+function enviarCorreoRecuperarContraseña($email, $contraseña)
+{
+  try {
+    // Crear una instancia de la clase PHPMailer
+    $mail = new PHPMailer();
+    // Autentificación vía SMTP
+    $mail->isSMTP();
+    $mail->SMTPAuth = true;
+    // Login
+    $mail->Host = "smtp.ionos.es";
+    $mail->Port = "587";
+    $mail->Username = "mihail.pistol@plansfortoday.me";
+    $mail->Password = "Aytos-Temporal22";
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+    $mail->CharSet = 'UTF-8';
+    $mail->isHTML(true);
+    $mail->Subject = 'Correo de recuperación de la contraseña';
+    $mail->Body = 'Tu contraseña es: ' . $contraseña;
+    $mail->addAddress($email, 'Nombre Destinatario');
+    $mail->send();
+    return true;
+  } catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: " . $mail->ErrorInfo;
+    return false;
   }
 }

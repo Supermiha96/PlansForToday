@@ -264,15 +264,15 @@ if (isset($_POST['añadirComentario'])) {
                                     <div class="row">
                                         <div class="form-group col-xs-12 col-sm-9 col-lg-10">
                                         <label for="titulo">Titulo para tu comentario</label></br>
-                                            <input type="text" name="titulo" placeholder="Título" required>
+                                            <input type="text" id="titulo" name="titulo" placeholder="Título" required>
                                         </div>
                                         <div class="form-group col-2 col-sm-9 col-lg-10">
                                         <label for="puntuacion">Tu puntuación para este plan sobre 10</label></br>
-                                            <input type="number" name="puntuacion" min="1" max="10" required>
+                                            <input type="number" id="puntuacion" name="puntuacion" min="1" max="10" required>
                                         </div>
                                         <div class="form-group col-xs-12 col-sm-9 col-lg-10">
                                         <label for="contenido">Contenido del comentario...</label>
-                                            <textarea class="form-control" name="contenido" id="message" placeholder="Contenido del comentario..." required=""></textarea>
+                                            <textarea class="form-control"  id="contenido" name="contenido" id="message" placeholder="Contenido del comentario..." required=""></textarea>
                                         </div>
                                     </div>
                                 </fieldset>
