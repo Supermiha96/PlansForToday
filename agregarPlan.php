@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $query = $conexion->prepare("INSERT INTO post (post_tit, post_desc, post_cont, post_pre, post_addr, usu_cod, cat_cod, ciu_cod) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $query->execute([$titulo, $descripcion, $contenido, $precio, $direccion, $usuarioId, $categoria, $ciudad]);
     $id_plan = $conexion->lastInsertId();
-    
+
     foreach ($imagenes['tmp_name'] as $index => $tmp_name) {
         $imagen = $imagenes['name'][$index];
         $imagen_tmp = $imagenes['tmp_name'][$index];
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 // Registrar la URL de la imagen en la tabla de imágenes
                 // (usando la función correspondiente en tu código)
-                registrarImagen($conexion, $imagen_url, $id_plan, $usuarioId);
+                registrarImagen($conexion, $imagen_url, $id_plan, $usuarioId, $mensaje);
             }
         }
     }

@@ -7,7 +7,7 @@ $city = $_GET['city'];
 $planId = $_GET['planId'];
 
 // Obtener los posts usando una consulta preparada
-$ObjPlan = obtenerPlan($conexion, $planId);
+$ObjPlan = obtenerPlan($conexion, $planId, $mensaje);
 
 // Recorrer los resultados y mostrar los posts
 foreach ($ObjPlan as $row) {
@@ -31,7 +31,7 @@ if (isset($_POST['añadirComentario'])) {
     $usuarioId = $objUsuario['usu_id'];
 
     // Agregar comentario usando una consulta preparada
-    agregarComentario($conexion, $planId, $usuarioId, $titulo, $contenido, $puntuacion);
+    agregarComentario($conexion, $planId, $usuarioId, $titulo, $contenido, $puntuacion,$mensaje);
 }
 ?>
 
@@ -83,9 +83,7 @@ if (isset($_POST['añadirComentario'])) {
                         <div class="swiper-wrapper">
                             <?php
                             // Obtener las URL de las imágenes desde la base de datos
-                            $imagenes = obtenerImagenes($conexion, $post_id); // Supongamos que tienes una función obtenerImagenes() que devuelve un array con las URL de las imágenes
-
-                            // Generar los elementos div con las imágenes dinámicamente
+                            $imagenes = obtenerImagenes($conexion, $post_id,$mensaje); 
                             foreach ($imagenes as $imagen) {
                                 echo '<div class="swiper-slide">';
                                 echo '<img src="' . $imagen['img_url'] . '" alt="Imagen">';
@@ -123,16 +121,16 @@ if (isset($_POST['añadirComentario'])) {
                                         slidesPerView: 2
                                     },
                                     768: {
-                                        slidesPerView: 1, // Mostrar 1 diapositiva en pantallas más pequeñas
+                                        slidesPerView: 1, 
                                     },
                                     576: {
-                                        slidesPerView: 1, // Mostrar 1 diapositiva en pantallas aún más pequeñas
+                                        slidesPerView: 1, 
                                     },
                                     425: {
-                                        slidesPerView: 1, // Mostrar 1 diapositiva en pantallas aún más pequeñas
+                                        slidesPerView: 1,
                                     },
                                     375: {
-                                        slidesPerView: 1, // Mostrar 1 diapositiva en pantallas aún más pequeñas
+                                        slidesPerView: 1, 
                                     },
                                 },
                             });
@@ -205,7 +203,7 @@ if (isset($_POST['añadirComentario'])) {
                 <div class="row">
                     <?php
                     echo $mensaje;
-                    $comments = obtenerComentarios($conexion, $_GET['planId']);
+                    $comments = obtenerComentarios($conexion, $_GET['planId'], $mensaje);
                     $averageRating = calcularPuntuacionMedia($comments);
 
                     foreach ($comments as $comment) {

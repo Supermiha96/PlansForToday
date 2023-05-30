@@ -46,7 +46,7 @@ $categoriaId = $_GET['categoria'] ?? '';
                 <h4 class="mt-4">Categorías</h4>
                 <ul class="categoria md-text-center">
                     <?php
-                    $categorias = obtenerCategorias($conexion);
+                    $categorias = obtenerCategorias($conexion, $mensaje);
                     foreach ($categorias as $categoria) {
                         $nombre = $categoria['cat_nom'];
                         $id = $categoria['cat_id'];
@@ -80,7 +80,7 @@ $categoriaId = $_GET['categoria'] ?? '';
                             $precio = $row['post_pre'];
                             $planId = $row['post_id'];
                             $objUsuario = buscarUsuarioEnBdPorId($row['usu_cod'], $conexion, $mensaje);
-                            $comments = obtenerComentarios($conexion, $planId);
+                            $comments = obtenerComentarios($conexion, $planId, $mensaje);
                             // Calcular la puntuación media
                             $averageRating = calcularPuntuacionMedia($comments);
 
@@ -90,7 +90,7 @@ $categoriaId = $_GET['categoria'] ?? '';
                                 <div class="row bg-white desplazamiento ms-5">
                                 <div class="col-12 col-lg-4 py-3 d-flex align-items-center justify-content-center">';
                             // Obtener todas las imágenes asociadas al plan
-                            $imagenes = obtenerImagenes($conexion, $planId);
+                            $imagenes = obtenerImagenes($conexion, $planId,$mensaje);
 
                             if (!empty($imagenes)) {
                                 // Obtener una imagen aleatoria de la lista
@@ -107,9 +107,13 @@ $categoriaId = $_GET['categoria'] ?? '';
                                     <div class="col-12 col-md-8 pt-3 pt-xl-5">
                                         <h3>' . $titulo . '</h3>
                                         <h6>' . $descripcion . '</h6>
-                                        <p>Puntuación media: ' . $averageRating . '/10</p>
-                                        <p> ' . $precio . ' <i class="fas fa-euro-sign"></i></p>
-                                        <a href="./plan.php?city=' . $ciudad . '&planId=' . $planId . '"><button class="btn btn-outline-success mb-2">Ver el plan completo</button></a>';
+                                        <p>Puntuación media: ' . $averageRating . '/10</p>';
+                            if ($precio == 0) {
+                                echo '<p>¡Gratuito!</p>';
+                            } else {
+                                echo '<p> ' . $precio . ' <i class="fas fa-euro-sign"></i></p>';
+                            }
+                            echo '<a href="./plan.php?city=' . $ciudad . '&planId=' . $planId . '"><button class="btn btn-outline-success mb-2">Ver el plan completo</button></a>';
                             if (isset($_SESSION['usuario']) && $_SESSION['usuario'] == $objUsuario['usu_email']) {
                                 echo  '<a href="./eliminar_plan.php?post_id=' . $planId . '&city=' . $ciudad . '&category=' . $categoriaId . '"><button class="btn btn-outline-danger mb-2">Eliminar</button></a>';
                             }
@@ -190,7 +194,7 @@ $categoriaId = $_GET['categoria'] ?? '';
                                     <label for="ciudad">Ciudad</label>
                                     <select class="form-control" id="ciudad" name="ciudad" required>
                                         <?php
-                                        $ciudades = obtenerCiudades($conexion);
+                                        $ciudades = obtenerCiudades($conexion, $mensaje);
                                         foreach ($ciudades as $ciudad) {
                                             $nombre = $ciudad['ciu_nom'];
                                             $id = $ciudad['ciu_id'];
@@ -203,7 +207,7 @@ $categoriaId = $_GET['categoria'] ?? '';
                                     <label for="categoria">Categoría</label>
                                     <select class="form-control" id="categoria" name="categoria" required>
                                         <?php
-                                        $categorias = obtenerCategorias($conexion);
+                                        $categorias = obtenerCategorias($conexion, $mensaje);
                                         foreach ($categorias as $categoria) {
                                             $nombre = $categoria['cat_nom'];
                                             $id = $categoria['cat_id'];

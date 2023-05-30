@@ -8,7 +8,7 @@ if (isset($_POST['email'])) {
 	$email = $_POST['email'];
 	$contraseña = 'contraseña_del_usuario';
 
-	if (enviarCorreoRecuperarContraseña($email, $contraseña)) {
+	if (enviarCorreoRecuperarContraseña($email, $contraseña, $mensaje)) {
 		$mensaje = lanzarExito('Correo electrónico enviado con éxito.');
 	} else {
 		$mensaje = lanzarError('Error al enviar el correo electrónico.');

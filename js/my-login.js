@@ -57,12 +57,12 @@ $(function() {
 		});
 	});
 
-	$(".my-login-validation").submit(function() {
+	$(".my-login-validation").submit(function(event) { 
 		var form = $(this);
-        if (form[0].checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
+		if (form[0].checkValidity() === false) {
+		  event.preventDefault(); // Evita la recarga de la página
+		  event.stopPropagation(); // Detiene la propagación del evento
+		}
 		form.addClass('was-validated');
+	  });
 	});
-});

@@ -5,7 +5,5 @@ session_start();
 if (isset($_POST['eliminarComentario'])) {
 
     $comentarioId = $_POST['comentarioId'];
-    eliminarComentario($conexion, $comentarioId);
+    eliminarComentario($conexion, $comentarioId, $mensaje);
 }
-
-

@@ -117,7 +117,7 @@ require_once 'conexion.php';
                 $destacados = obtenerPlanesDestacados($conexion);
                 
                 foreach ($destacados as $plan) {
-                    $imagenes = obtenerImagenes($conexion, $plan['post_id']);
+                    $imagenes = obtenerImagenes($conexion, $plan['post_id'],$mensaje);
 
                     if (!empty($imagenes)) {
                         // Obtener una imagen aleatoria de la lista

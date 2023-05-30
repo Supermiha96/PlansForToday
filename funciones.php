@@ -9,7 +9,10 @@ require './PHPMailer/src/Exception.php';
 require './PHPMailer/src/PHPMailer.php';
 require './PHPMailer/src/SMTP.php';
 
-
+/**
+ * Funcion que pinta la parte header de la página web.(Navbar)
+ * @param type $conexion
+ */
 function theHeader($conexion)
 {
   if (isset($_SESSION['usuario'])) {
@@ -124,7 +127,9 @@ function theHeader($conexion)
 <?php
 }
 
-
+/**
+ * Pinta la parte footer
+ */
 
 function theFooter()
 {
@@ -288,9 +293,8 @@ function validarNuevoUsuario($password, $password_confirm, $email, &$mensaje)
 /**
  * Inserta un usuario con todos sus datos pasados como parametros en la base de datos
  * @param String $password
- * @param type $password_confirm
  * @param type $nombre
- * @param type $fNacimiento
+ * @param type $email
  * @param type $conexion
  * @param type $mensaje
  * @return boolean
@@ -328,11 +332,11 @@ function insertarUsuario($nombre, $password, $email, $conexion, &$mensaje)
 }
 
 /**
- * Busca un usuario determinado por login en la base de datos y devuelve un objeto array asociativo con los datos del usuario
- * @param type $login
+ * Busca un usuario determinado por email en la base de datos y devuelve un objeto array asociativo con los datos del usuario
+ * @param type $email
  * @param type $conexion
  * @param type $mensaje
- * @return type
+ * @return type $objUsuario
  */
 function buscarUsuarioEnBd($email, $conexion, &$mensaje)
 {
@@ -350,17 +354,21 @@ function buscarUsuarioEnBd($email, $conexion, &$mensaje)
 
     $query->closeCursor();
   } catch (PDOException $e) {
-    $resultado = false;
     $mensaje = $e->getMessage();
     die();
   } catch (Exception $e) {
-    $resultado = false;
     $mensaje = $e->getMessage();
     die();
   }
   return $objUsuario;
 }
-
+/**
+ * Busca un usuario determinado por id en la base de datos y devuelve un objeto array asociativo con los datos del usuario
+ * @param type $usuId
+ * @param type $conexion
+ * @param type $mensaje
+ * @return type $objUsuario
+ */
 function buscarUsuarioEnBdPorId($usuId, $conexion, &$mensaje)
 {
 
@@ -377,23 +385,29 @@ function buscarUsuarioEnBdPorId($usuId, $conexion, &$mensaje)
 
     $query->closeCursor();
   } catch (PDOException $e) {
-    $resultado = false;
     $mensaje = $e->getMessage();
     die();
   } catch (Exception $e) {
-    $resultado = false;
     $mensaje = $e->getMessage();
     die();
   }
   return $objUsuario;
 }
-function buscarCiudadPorId($conexion, $ciu_id, &$mensaje)
+
+/**
+ * Busca una ciudad determinada por id en la base de datos y devuelve un objeto array asociativo con los datos de la ciudad
+ * @param type $email
+ * @param type $conexion
+ * @param type $mensaje
+ * @return type $objCiudad
+ */
+function buscarCiudadPorId($conexion, $ciuId, &$mensaje)
 {
   $objCiudad = null;
   try {
 
     $query = $conexion->prepare("SELECT * FROM `ciudad` WHERE `ciu_id` =  ?");
-    $query->bindParam(1, $ciu_id);
+    $query->bindParam(1, $ciuId);
     $query->execute();
 
     if ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -402,23 +416,33 @@ function buscarCiudadPorId($conexion, $ciu_id, &$mensaje)
 
     $query->closeCursor();
   } catch (PDOException $e) {
-    $resultado = false;
+
     $mensaje = $e->getMessage();
     die();
   } catch (Exception $e) {
-    $resultado = false;
     $mensaje = $e->getMessage();
     die();
   }
   return $objCiudad;
 }
 
+/**
+ * Actualiza el usuario en la base de datos 
+ * @param type $conexion
+ * @param type $usuarioEmailSession
+ * @param type $nombre
+ * @param type $apellidos
+ * @param type $email
+ * @param type $telefono
+ * @param type $ciudad
+ * @param type $pais
+ */
 
-function actualizarUsuario($conexion, $usuarioEmail, $nombre, $apellidos, $email, $telefono, $ciudad, $pais)
+function actualizarUsuario($conexion, $usuarioEmailSession, $nombre, $apellidos, $email, $telefono, $ciudad, $pais)
 {
   try {
     // Preparar la consulta SQL
-    $query = "UPDATE usuario SET usu_nom = :nombre, usu_apes = :apellidos, usu_email = :email, usu_tel = :telefono, usu_ciu = :ciudad, usu_pais = :pais WHERE usu_email = :usuarioEmail";
+    $query = "UPDATE usuario SET usu_nom = :nombre, usu_apes = :apellidos, usu_email = :email, usu_tel = :telefono, usu_ciu = :ciudad, usu_pais = :pais WHERE usu_email = :usuarioEmailSession";
     $stmt = $conexion->prepare($query);
 
     // Asignar los valores de los parámetros
@@ -428,7 +452,7 @@ function actualizarUsuario($conexion, $usuarioEmail, $nombre, $apellidos, $email
     $stmt->bindParam(':telefono', $telefono, PDO::PARAM_STR);
     $stmt->bindParam(':ciudad', $ciudad, PDO::PARAM_STR);
     $stmt->bindParam(':pais', $pais, PDO::PARAM_STR);
-    $stmt->bindParam(':usuarioEmail', $usuarioEmail, PDO::PARAM_STR);
+    $stmt->bindParam(':usuarioEmailSession', $usuarioEmailSession, PDO::PARAM_STR);
 
     // Ejecutar la consulta
     $stmt->execute();
@@ -437,7 +461,7 @@ function actualizarUsuario($conexion, $usuarioEmail, $nombre, $apellidos, $email
     if ($stmt->rowCount() > 0) {
       lanzarExito("Usuario actualizado con exito.");
     } else {
-      lanzarError("No se ha podido realizar la actualizazación del usuario."); // No se encontró el usuario o no se realizó ninguna actualización
+      lanzarError("No se ha podido realizar la actualizazación del usuario.");
     }
   } catch (PDOException $e) {
     lanzarError("Error al actualizar el usuario: " . $e->getMessage());
@@ -445,16 +469,31 @@ function actualizarUsuario($conexion, $usuarioEmail, $nombre, $apellidos, $email
 }
 /**
  * Función para rescatar la lista de las categorias desde la base de datos
+ * @param type $conexion
+ * @param type $mensaje
+ * @return type $categorias
  */
 
-function obtenerCategorias($conexion)
+function obtenerCategorias($conexion, &$mensaje)
 {
-  $query = $conexion->prepare('SELECT * FROM categoria');
-  $query->execute();
-  $categorias = $query->fetchAll(PDO::FETCH_ASSOC);
-  return $categorias;
+  try {
+    $query = $conexion->prepare('SELECT * FROM categoria');
+    $query->execute();
+    $categorias = $query->fetchAll(PDO::FETCH_ASSOC);
+    return $categorias;
+  } catch (PDOException $e) {
+    $mensaje = $e->getMessage();
+    exit;
+  }
 }
-function obtenerCiudades($conexion)
+
+/**
+ * Función para rescatar la lista de las ciudades desde la base de datos
+ * @param type $conexion
+ * @param type $mensaje
+ * @return type $ciudades
+ */
+function obtenerCiudades($conexion, &$mensaje)
 {
   try {
     $query = $conexion->prepare("SELECT * FROM ciudad");
@@ -462,23 +501,38 @@ function obtenerCiudades($conexion)
     $ciudades = $query->fetchAll(PDO::FETCH_ASSOC);
     return $ciudades;
   } catch (PDOException $e) {
-    // Manejo de errores - puedes personalizarlo según tus necesidades
-    echo "Error al obtener las ciudades: " . $e->getMessage();
+    $mensaje = $e->getMessage();
     exit;
   }
 }
 
 
-
-function obtenerPlan($conexion, $planId)
+/**
+ * Función para rescatar la lista de las planes por id desde la base de datos
+ * @param type $conexion
+ * @param type $mensaje
+ * @param type $planId
+ * @return type $resultados
+ */
+function obtenerPlan($conexion, $planId, &$mensaje)
 {
-  $query = $conexion->prepare('SELECT * FROM post WHERE post_id =  ?');
-  $query->bindParam(1, $planId);
-  $query->execute();
-  $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
-  return $resultados;
+  try {
+    $query = $conexion->prepare('SELECT * FROM post WHERE post_id =  ?');
+    $query->bindParam(1, $planId);
+    $query->execute();
+    $resultados = $query->fetchAll(PDO::FETCH_ASSOC);
+    return $resultados;
+  } catch (PDOException $e) {
+    $mensaje = $e->getMessage();
+    exit;
+  }
 }
 
+/**
+ * Función para rescatar los planes pero los hace de manera aleatoria para los planes destacados,devuelve un array.
+ * @param type $conexion
+ * @return type $destacados 
+ */
 
 function obtenerPlanesDestacados($conexion)
 {
@@ -517,43 +571,71 @@ function obtenerPlanesDestacados($conexion)
 
   return $destacados;
 }
-// Función para eliminar un post
-function eliminarPost($conexion, $post_id)
+/** 
+ * Función para eliminar un post
+ * @param type $conexion
+ * @param type $postId
+ * @param type $mensaje
+ * @return boolean
+ */
+function eliminarPost($conexion, $postId, &$mensaje)
 {
   try {
 
-    if ($conexion && $post_id) {
+    if ($conexion && $postId) {
 
       $query = "DELETE FROM post WHERE post_id = :post_id";
       $stmt = $conexion->prepare($query);
-      $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
+      $stmt->bindParam(':post_id', $postId, PDO::PARAM_INT);
       $stmt->execute();
+      return true;
     } else {
       // Datos inválidos proporcionados
-      throw new Exception("Datos inválidos");
+      $mensaje = throw new Exception("Datos inválidos");
     }
   } catch (Exception $e) {
     // Manejo de errores
-    lanzarError("Error: " . $e->getMessage());
+    $mensaje = "Error: " . $e->getMessage();
     return false;
   }
 }
 
 
+/**
+ * Obtener comentarios desde la base de datos por id
+ * @param type $conexion
+ * @param type $postId
+ * @param type $mensaje
+ * @return type $comentarios
+ */
 
-
-function obtenerComentarios($conexion, $postId)
+function obtenerComentarios($conexion, $postId, &$mensaje)
 {
-  $query = "SELECT * FROM post JOIN comentario ON comentario.post_cod = post.post_id JOIN usuario ON comentario.usu_cod = usuario.usu_id WHERE post_cod = :postId";
-  $stmt = $conexion->prepare($query);
-  $stmt->bindParam(':postId', $postId);
-  $stmt->execute();
+  try {
+    $query = "SELECT * FROM post JOIN comentario ON comentario.post_cod = post.post_id JOIN usuario ON comentario.usu_cod = usuario.usu_id WHERE post_cod = :postId";
+    $stmt = $conexion->prepare($query);
+    $stmt->bindParam(':postId', $postId);
+    $stmt->execute();
 
-  $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-  return $comments;
+    $comentarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $comentarios;
+  } catch (PDOException $e) {
+    $mensaje = $e->getMessage();
+    exit;
+  }
 }
 
-function agregarComentario($conexion, $postId, $usuarioId, $titulo, $cuerpo, $puntuacion)
+/**
+ * Función para añadir comentarios en la base de datos
+ * @param type $conexion
+ * @param type $postId
+ * @param type $usuarioId
+ * @param type $titulo
+ * @param type $cuerpo
+ * @param type $puntuacion
+ * @param type $conexion
+ */
+function agregarComentario($conexion, $postId, $usuarioId, $titulo, $cuerpo, $puntuacion, &$mensaje)
 {
   try {
     $query = "INSERT INTO `comentario`  (`com_id`, `com_tit`, `com_cuer`, `com_punt`, `com_fec`, `usu_cod`, `post_cod`) VALUES (NULL,:titulo, :cuerpo, :puntuacion, CURDATE(), :usuarioId, :postId)";
@@ -573,32 +655,48 @@ function agregarComentario($conexion, $postId, $usuarioId, $titulo, $cuerpo, $pu
       lanzarError("No se pudo agregar el comentario");
     }
   } catch (PDOException $e) {
-    lanzarError($e->getMessage());
-    // Manejo de error de PDO
+    $mensaje = $e->getMessage();
   } catch (Exception $e) {
-    lanzarError($e->getMessage());
-    // Manejo de otro tipo de error
+    $mensaje = $e->getMessage();
   }
 }
 
-function eliminarComentario($conexion, $comentarioId)
+/**
+ * Función para eliminar un comentario desde la base de datos
+ * @param type $conexion
+ * @param type $comentarioId
+ * @param type $mensaje
+ */
+function eliminarComentario($conexion, $comentarioId, &$mensaje)
 {
-  $query = "DELETE FROM comentario WHERE com_id = :comentarioId";
-  $stmt = $conexion->prepare($query);
-  $stmt->bindParam(':comentarioId', $comentarioId);
-  $stmt->execute();
+  try {
+    $query = "DELETE FROM comentario WHERE com_id = :comentarioId";
+    $stmt = $conexion->prepare($query);
+    $stmt->bindParam(':comentarioId', $comentarioId);
+    $stmt->execute();
+    return true;
+  } catch (Exception $e) {
+    // Manejo de errores
+    $mensaje = "Error: " . $e->getMessage();
+    return false;
+  }
 }
 
-function calcularPuntuacionMedia($comments)
+/**
+ * Función para calcular la puntuación media de los comentarios
+ * @param array $comentarios
+ * @return type $puntuacionMedia
+ */
+function calcularPuntuacionMedia($comentarios)
 {
   $totalPuntuacion = 0;
-  $cantidadComentarios = count($comments);
+  $cantidadComentarios = count($comentarios);
 
-  foreach ($comments as $comment) {
+  foreach ($comentarios as $comentario) {
     // Verificar si la clave 'puntuacion' está definida en el comentario
-    if (isset($comment['com_punt'])) {
+    if (isset($comentario['com_punt'])) {
       // Convertir la puntuacion a un entero antes de sumarla
-      $puntuacion = intval($comment['com_punt']);
+      $puntuacion = intval($comentario['com_punt']);
       $totalPuntuacion += $puntuacion;
     }
   }
@@ -611,7 +709,17 @@ function calcularPuntuacionMedia($comments)
 
   return $puntuacionMedia;
 }
-function registrarImagen($conexion, $imagen_url, $id_plan, $usuarioId)
+
+/**
+ * Función para agregar a la base de datos una imagen.
+ * @param type $conexion
+ * @param type $imagen_url
+ * @param type $idPlan
+ * @param type $usuarioId
+ * @param type $mensaje
+ */
+
+function registrarImagen($conexion, $imagen_url, $idPlan, $usuarioId, &$mensaje)
 {
   try {
     // Preparar la consulta SQL
@@ -622,18 +730,26 @@ function registrarImagen($conexion, $imagen_url, $id_plan, $usuarioId)
 
     // Vincular los parámetros con los valores
     $stmt->bindParam(':img_url', $imagen_url);
-    $stmt->bindParam(':id_post', $id_plan);
+    $stmt->bindParam(':id_post', $idPlan);
     $stmt->bindParam(':id_usu', $usuarioId);
 
     // Ejecutar la consulta
     $stmt->execute();
   } catch (PDOException $e) {
     // Error al ejecutar la consulta
-    echo "Error: " . $e->getMessage();
+    $mensaje = "Error: " . $e->getMessage();
   }
 }
 
-function obtenerImagenes($conexion, $planId)
+
+/**
+ * Función para rescatar imagen por id
+ * @param type $conexion
+ * @param type $planId
+ * @param type $mensaje
+ * @return array $resultados
+ */
+function obtenerImagenes($conexion, $planId, &$mensaje)
 {
   try {
     // Preparar la consulta SQL
@@ -649,14 +765,20 @@ function obtenerImagenes($conexion, $planId)
     return $resultados;
   } catch (PDOException $e) {
     // Manejo de error de PDO
-    lanzarError($e->getMessage());
+    $mensaje = $e->getMessage();
   } catch (Exception $e) {
     // Manejo de otro tipo de error
-    lanzarError($e->getMessage());
+    $mensaje = $e->getMessage();
   }
 }
-
-function enviarCorreoRecuperarContraseña($email, $contraseña)
+/**
+ * función para enviar correo con la contraseña del usuario
+ * @param type $email
+ * @param type $contraseña
+ * @param type $mensaje
+ * @return boolean
+ */
+function enviarCorreoRecuperarContraseña($email, $contraseña, &$mensaje)
 {
   try {
     // Crear una instancia de la clase PHPMailer
@@ -679,7 +801,7 @@ function enviarCorreoRecuperarContraseña($email, $contraseña)
     $mail->send();
     return true;
   } catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: " . $mail->ErrorInfo;
+    $mensaje = "Message could not be sent. Mailer Error: " . $mail->ErrorInfo;
     return false;
   }
 }
