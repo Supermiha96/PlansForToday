@@ -29,15 +29,16 @@ require_once 'conexion.php';
 			if (!validarLoginUsuario($email, $password, $conexion, $mensaje)) {
 				$mensaje = lanzarError($mensaje);
 			} else {
-				$mensaje = lanzarExito("Usuario identificado correctamente");
+				
 				// Iniciamos la sesi&oacute;n
 				session_start();
 				// Metemos el login de usuario en la sesi&oacute;n
 				$_SESSION['usuario'] = $email;
 				// Registramos la fecha hora de conexion
 				//print "<p>hora conexion " . getNow() . "</p>";
-				$_SESSION['conexion'] = getNow();
-				header("refresh:1;url=index.php");
+				//$_SESSION['conexion'] = getNow();
+				header("Location: ./index.php");
+				$mensaje = lanzarExito("Usuario identificado correctamente");
 			}
 		} else {
 			$mensaje = lanzarError("Debe rellenar los campos usuario y contraseña.");
