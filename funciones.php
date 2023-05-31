@@ -43,10 +43,10 @@ function theHeader($conexion)
 
       <div class="collapse navbar-collapse text-white text-center" id="navbarNav">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item active escalar">
             <a class="nav-link" href="./index.php">Inicio</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item escalar">
             <a class="nav-link" href="#">Acerca de</a>
           </li>
         </ul>
@@ -54,8 +54,8 @@ function theHeader($conexion)
         <?php if (isset($_SESSION['usuario'])) { // Verificar si existe la sesión 'usuario' 
         ?>
           <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item dropdown escalar">
+              <a class="nav-link dropdown-toggle " href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa-solid fa-user"></i>
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
@@ -67,7 +67,7 @@ function theHeader($conexion)
         <?php } else { // Si no existe la sesión 'usuario' 
         ?>
           <ul class="navbar-nav me-3">
-            <li class="nav-item">
+            <li class="nav-item escalar">
               <a class="nav-link" href="./login.php">Iniciar sesión</a>
             </li>
           </ul>
@@ -137,7 +137,7 @@ function theFooter()
   <footer class="w-100 mt-6">
     <div class="container border-top">
       <div class="row">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-4 ms-5">
           <h3>Nosotros</h3>
           <p>¡Busca tu plan perfecto y disfuta!</p>
         </div>

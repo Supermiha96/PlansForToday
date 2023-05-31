@@ -129,7 +129,7 @@ require_once 'conexion.php';
                     }
                     echo '<div class="col-lg-4 mb-4">';
                     echo '<div class="card">';
-                    echo '<img src="'.$imagenUrl.'" class="card-img-top" alt="'.$imagenUrl.'">';
+                    echo '<img src="'.$imagenUrl.'" height="300" class="card-img-top" alt="'.$imagenUrl.'">';
                     echo '<div class="card-body">';
                     echo '<h5 class="card-title">' . $plan['post_tit'] . '</h5>';
                     echo '<p class="card-text">' . $plan['post_desc'] . '</p>';

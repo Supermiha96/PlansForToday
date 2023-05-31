@@ -34,9 +34,7 @@ require_once 'conexion.php';
 				session_start();
 				// Metemos el login de usuario en la sesi&oacute;n
 				$_SESSION['usuario'] = $email;
-				// Registramos la fecha hora de conexion
-				//print "<p>hora conexion " . getNow() . "</p>";
-				//$_SESSION['conexion'] = getNow();
+				$_SESSION['conexion'] = getNow();
 				header("Location: ./index.php");
 				$mensaje = lanzarExito("Usuario identificado correctamente");
 			}
@@ -61,7 +59,7 @@ require_once 'conexion.php';
 					</div>
 					<div class="card fat">
 						<div class="card-body">
-							<h4 class="card-title">Iniciar Sesión</h4>
+							<h4 class="card-title text-center">Iniciar Sesión</h4>
 							<form method="POST" class="my-login-validation" action="<?php $_SERVER['PHP_SELF']; ?>">
 								<div class="form-group">
 									<label for="email">E-Mail</label>

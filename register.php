@@ -74,7 +74,7 @@ require_once 'conexion.php';
 					</div>
 					<div class="card fat">
 						<div class="card-body">
-							<h4 class="card-title">Registro</h4>
+							<h4 class="card-title text-center">Registro</h4>
 							<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" class="my-login-validation" novalidate="">
 								<div class="form-group">
 									<label for="name">Nombre</label>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-05-2023 a las 20:36:08
+-- Tiempo de generación: 31-05-2023 a las 22:16:05
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -43,12 +43,12 @@ INSERT INTO `categoria` (`cat_id`, `cat_nom`) VALUES
 (1, 'Restaurantes y Gastronomía'),
 (2, 'Museos'),
 (3, 'Parques'),
-(4, 'Lugares históricos '),
-(5, 'Lugares misteriosos'),
-(6, 'Lugares con encanto'),
+(4, 'Planes historicos'),
+(5, 'Planes misteriosos'),
+(6, 'Planes con encanto'),
 (7, 'Espectaculos'),
 (8, 'Aventura y naturaleza'),
-(17, 'Visitas guiadas');
+(9, 'Visitas guiadas');
 
 -- --------------------------------------------------------
 
@@ -59,11 +59,11 @@ INSERT INTO `categoria` (`cat_id`, `cat_nom`) VALUES
 DROP TABLE IF EXISTS `ciudad`;
 CREATE TABLE `ciudad` (
   `ciu_id` int(11) NOT NULL,
-  `ciu_nom` varchar(50) NOT NULL,
-  `ciu_lat` double NOT NULL,
-  `ciu_long` double NOT NULL,
-  `ciu_prov` varchar(30) NOT NULL,
-  `ciu_pais` varchar(30) NOT NULL
+  `ciu_nom` varchar(100) NOT NULL,
+  `ciu_lat` double DEFAULT NULL,
+  `ciu_long` double DEFAULT NULL,
+  `ciu_prov` varchar(100) NOT NULL,
+  `ciu_pais` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -71,11 +71,17 @@ CREATE TABLE `ciudad` (
 --
 
 INSERT INTO `ciudad` (`ciu_id`, `ciu_nom`, `ciu_lat`, `ciu_long`, `ciu_prov`, `ciu_pais`) VALUES
-(1, 'Écija', 37.5422, -5.0826, 'Sevilla', 'España'),
-(2, 'Sevilla', 37.38283, -5.97317, 'Sevilla', 'España'),
-(3, 'Madrid', 40.4165, -3.70256, 'Madrid', 'España'),
-(4, 'Barcelona', 41.38879, 2.15899, 'Barcelona', 'España'),
-(5, 'Jaén', 37.76922, -3.79028, 'Andalucia', 'España');
+(31, 'A Coruña', 43.37135, -8.396, 'A Coruña', 'España'),
+(32, 'Almería', 36.83814, -2.45974, 'Almería', 'España'),
+(33, 'Bilbao', 43.25, -2.91667, 'Vizcaya', 'España'),
+(34, 'Huelva', 37.26638, -6.94004, 'Huelva', 'España'),
+(35, 'Sevilla', 37.38283, -5.97317, 'Sevilla', 'España'),
+(36, 'Ourense', 42.16667, -7.5, 'Ourense', 'España'),
+(37, 'Santa Cruz de Tenerife', 28.46824, -16.25462, 'Santa Cruz de Tenerife', 'España'),
+(38, 'Palma', 39.56951, 2.64745, 'Illes Balears', 'España'),
+(39, 'Barcelona', 41.38879, 2.15899, 'Barcelona', 'España'),
+(40, 'León', 42.60003, -5.57032, 'León', 'España'),
+(41, 'Écija', 37.5422, -5.0826, 'Sevilla', 'España');
 
 -- --------------------------------------------------------
 
@@ -99,16 +105,9 @@ CREATE TABLE `comentario` (
 --
 
 INSERT INTO `comentario` (`com_id`, `com_tit`, `com_cuer`, `com_punt`, `com_fec`, `usu_cod`, `post_cod`) VALUES
-(9, 'Visita', 'Buena visita no le doy un 10 por no explicar el motivo ', 8, '2023-05-26', 13, 2),
-(11, 'Visita', 'Buena visita no le doy un 10 por no explicar el motivo ', 8, '2023-05-26', 13, 2),
-(12, 'Visita', '😊', 5, '2023-05-26', 13, 2),
-(21, 'Titulo del comentario', 'Contenido.', 10, '2023-05-27', 12, 15),
-(22, 'Titulo del comentario', 'Contenido.', 10, '2023-05-27', 12, 15),
-(51, 'aa', 'sa', 1, '2023-05-29', 14, 2),
-(52, 'a', 'asd', 1, '2023-05-29', 11, 2),
-(57, 'Súper Bien', 'Me ha encantado', 8, '2023-05-29', 12, 2),
-(58, 'prueba2', 'prueba2', 2, '2023-05-29', 11, 2),
-(59, 'Perfecto', 'Me ha encantado', 10, '2023-05-29', 11, 31);
+(78, '¡Genial!', 'Es una experiencia única!', 10, '2023-05-31', 15, 42),
+(79, 'Perfecto', 'Genial', 8, '2023-05-31', 15, 42),
+(80, '¡Genial!', 'Me ha encantado', 10, '2023-05-31', 17, 49);
 
 -- --------------------------------------------------------
 
@@ -129,9 +128,63 @@ CREATE TABLE `imagenes` (
 --
 
 INSERT INTO `imagenes` (`img_id`, `img_url`, `id_post`, `id_usu`) VALUES
-(6, './img/planes/6474efc8bc5cf.avif', 31, NULL),
-(7, './img/planes/6474efc8bd90d.avif', 31, NULL),
-(8, './img/planes/6474efc8bf77a.avif', 31, NULL);
+(11, './img/planes/64751419d560d.avif', 42, 15),
+(12, './img/planes/64751419d6493.avif', 42, 15),
+(13, './img/planes/64751419d7f35.avif', 42, 15),
+(17, './img/planes/64762edabcbe9.avif', 44, 15),
+(18, './img/planes/64762edabda4d.avif', 44, 15),
+(19, './img/planes/64762edabea50.avif', 44, 15),
+(20, './img/planes/6476308d96a81.avif', 45, 15),
+(21, './img/planes/6476308d97a76.avif', 45, 15),
+(22, './img/planes/6476308d98bd3.avif', 45, 15),
+(23, './img/planes/647631c62b81c.avif', 46, 15),
+(24, './img/planes/647631c62c3c6.avif', 46, 15),
+(25, './img/planes/647631c62d3a9.avif', 46, 15),
+(26, './img/planes/6476325f3f18e.avif', 47, 15),
+(27, './img/planes/6476325f3ff06.avif', 47, 15),
+(28, './img/planes/6476325f40fbd.avif', 47, 15),
+(29, './img/planes/647633eb6e269.jpg', 48, 15),
+(30, './img/planes/647633eb6f574.jpg', 48, 15),
+(31, './img/planes/647633eb7075a.jpg', 48, 15),
+(32, './img/planes/64763640ac8cd.jfif', 49, 15),
+(33, './img/planes/64763640adafb.jpg', 49, 15),
+(34, './img/planes/64763640ae94f.jpg', 49, 15),
+(35, './img/planes/6476385304c22.jpg', 50, 15),
+(36, './img/planes/6476385305c0f.webp', 50, 15),
+(37, './img/planes/6476385306c7f.jpg', 50, 15),
+(38, './img/planes/64763b042d3a9.jpg', 51, 16),
+(39, './img/planes/64763b042e9dc.webp', 51, 16),
+(40, './img/planes/64763b042fab9.jpg', 51, 16),
+(41, './img/planes/64763d3f59ed0.jpg', 52, 16),
+(42, './img/planes/64763d3f5ae98.jpeg', 52, 16),
+(43, './img/planes/64763d3f5c0df.jfif', 52, 16),
+(44, './img/planes/64763f6d08ae2.jpg', 53, 16),
+(45, './img/planes/64763f6d09ee7.avif', 53, 16),
+(46, './img/planes/64763f6d0b3f4.jpg', 53, 16),
+(47, './img/planes/64764177e64f2.jpg', 54, 16),
+(48, './img/planes/64764177e766a.jpg', 54, 16),
+(49, './img/planes/64764177e8a80.jfif', 54, 16),
+(50, './img/planes/647646705f248.avif', 55, 16),
+(51, './img/planes/64764670600b6.avif', 55, 16),
+(52, './img/planes/6476467061075.avif', 55, 16),
+(53, './img/planes/64764792811d1.avif', 56, 16),
+(54, './img/planes/6476479282513.avif', 56, 16),
+(55, './img/planes/64764792833e9.avif', 56, 16),
+(56, './img/planes/64764948e7c2f.avif', 57, 16),
+(57, './img/planes/64764948e8c15.avif', 57, 16),
+(58, './img/planes/64764948e9d9c.avif', 57, 16),
+(59, './img/planes/64764ae4e811e.jpg', 58, 16),
+(60, './img/planes/64764ae4e8ffa.jfif', 58, 16),
+(61, './img/planes/64764ae4e9e26.jpg', 58, 16),
+(62, './img/planes/64764bb72fea0.jpg', 59, 16),
+(63, './img/planes/64764bb731012.jpg', 59, 16),
+(64, './img/planes/64764bb7322be.jpg', 59, 16),
+(65, './img/planes/64764cc1d3d78.avif', 60, 16),
+(66, './img/planes/64764cc1d4cc1.avif', 60, 16),
+(67, './img/planes/64764cc1d5cf3.avif', 60, 16),
+(68, './img/planes/64764d63060ff.avif', 61, 16),
+(69, './img/planes/64764d6306fb2.avif', 61, 16),
+(70, './img/planes/64764d6307e27.avif', 61, 16);
 
 -- --------------------------------------------------------
 
@@ -157,11 +210,26 @@ CREATE TABLE `post` (
 --
 
 INSERT INTO `post` (`post_id`, `post_tit`, `post_desc`, `post_cont`, `post_pre`, `post_addr`, `usu_cod`, `cat_cod`, `ciu_cod`) VALUES
-(2, 'Visita guiada por Écija', 'Palacios, plazas, iglesias y restos romanos están esperando a ser descubiertos en esta visita guiada por Écija. ¿Os apuntáis a indagar en el pasado de esta localidad sevillana?', 'Écija es una ciudad sorprendente. Llena de rincones bellos, plazas con encanto, palacios, torres e iglesias. Pero además de su belleza barroca, su historia esconde un importantísimo pasado romano que asombra al visitante.\r\n\r\nNuestros guías locales serán tus anfitriones en una magnífica visita guiada en la que descubrirás el Palacio de Benamejí, sede del museo de la ciudad que alberga un gran colección de mosaicos; el Palacio de Peñaflor, una joya barroca desde la que divisarás las mejores vistas de las torres; el Arca Real del Agua, curiosísimo y pequeño edificio del siglo XVI y el Estanque Romano en el corazón de la ciudad.\r\n\r\nLa mejor forma de conocer Écija al detalle y disfrutar de una experiencia inolvidable. Tenemos la llave de la historia de la ciudad, que te permitirá viajar a su pasado desde el interior de sus monumentos.', 10, '\r\nPalacio de Benamejí', 11, 17, 1),
-(3, 'Tour por el Alcázar, la Catedral y la Giralda', 'En este tour os impregnaréis de la magia de la capital andaluza visitando los tres monumentos más importantes de Sevilla: el Real Alcázar, la catedral de Santa María de la Sede y la Giralda, el símbolo de la ciudad.', 'Conoce los principales monumentos de Sevilla. La Catedral, La Giralda y el Real Alcázar.\r\n\r\nCon la compañía de un guía turístico oficial de la ciudad, visite obras emblemáticas del patrimonio histórico y artístico andaluz.\r\n\r\nLa Catedral de Sevilla, llamada Santa María de la Sede, fue levantada en una antigua mezquita. Se trata del edificio de estilo gótico más grande del mundo.\r\n\r\nDentro recorreremos sus diferentes naves. Nos centraremos principalmente en la tumba de Cristóbal Colón y el retablo mayor.\r\n\r\nUna vez contemplada la catedral, podrás disfrutar de las mejores vistas de la ciudad de Sevilla subiendo a la emblemática torre de La Giralda, símbolo de la ciudad. Ánimo, “sólo” son 98 metros de altura.\r\n\r\n¡En el Real Alcázar de Sevilla visitarás el palacio real en uso más antiguo de Europa! Además, fue escenario de la serie Juego de Tronos, donde reconocerás los escenarios del Reino de Dorne.\r\n\r\nNos adentraremos en todas sus salas, la Puerta del León, la Sala de la Justicia, el Cuarto del Almirante, el Patio del Crucero, el Palacio Mudéjar, el Palacio Gótico, etc. \r\n\r\nPor último, disfrutaremos de los Jardines, con su famoso Estanque de Mercurio, la Galería de Grutesco, etc.\r\n\r\nDespués de este maravilloso tour podrás decir que eres todo un experto en la historia de estos monumentos de Sevilla.', 25, 'Calle Francos, 19', 11, 17, 2),
-(4, 'Tour de tapas y vinos por Madrid', 'En este tour guiado recorreremos las zonas más emblemáticas de Madrid y visitaremos los mejores bares de tapas de la ciudad para experimentar los sabores de la gastronomía española mientras descubrimos los secretos de la capital.', 'Itinerario\r\n\r\nNos encontraremos a la hora seleccionada en la Plaza de Santa Ana, en pleno corazón de Madrid. Desde aquí, comenzaremos un recorrido gastronómico de dos horas y media de duración en el que conoceréis los secretos de la ciudad mientras disfrutáis de una degustación de tapas.\r\n\r\nRecorreremos el centro de Madrid, su casco histórico y el Madrid de los Austrias, algunas de las zonas más típicas para disfrutar de los sabores locales.\r\n\r\nDurante el recorrido, visitaremos algunos de los mejores bares de tapas de la ciudad, reconocidos por servir auténtica comida española desde principios del siglo pasado. Nos sentaremos a las mesas o permaneceremos de pie al más puro estilo madrileño para disfrutar de la cultura de las tapas, degustando una selección gourmet de las mejores tapas de jamón ibérico de bellota, gambas al ajillo, cazón en adobo y muchos otros productos típicos de la gastronomía española.\r\n\r\nDegustaremos estos productos maridados con vinos de las mejores Denominaciones de Origen de España, y además disfrutaréis de una consumición en cada local. \r\n\r\nLos guías son locales, enamorados de la cultura y la gastronomía local, y acompañarán el tour con infinidad de detalles y anécdotas sobre la historia y los secretos de Madrid. ¡Os encantará!', 80, 'Plaza de Santa Ana', 11, 1, 3),
-(19, 'Visita guiada por el yacimiento arqueológico Plaza de Armas', 'En esta visita guiada por el yacimiento arqueológico Plaza de Armas descubriremos los orígenes de Écija. Veremos uno de los estucos mejor conservados del Imperio Romano y descubriremos cómo vivieron los musulmanes en esta población.', 'En esta visita guiada por el yacimiento arqueológico Plaza de Armas descubriremos los orígenes de Écija. Veremos uno de los estucos mejor conservados del Imperio Romano y descubriremos cómo vivieron los musulmanes en esta población.', 10, 'Yacimiento arqueológico Plaza de Armas', 12, 17, 1),
-(31, 'PruebaImagenes', 'as', 'asd', 10, 'Calle del conde', 11, 17, 1);
+(42, 'Visita guiada por Écija', 'Palacios, plazas, iglesias y restos romanos están esperando a ser descubiertos en esta visita guiada por Écija. ¿Os apuntáis a indagar en el pasado de esta localidad sevillana?', 'Écija es una ciudad sorprendente. Llena de rincones bellos, plazas con encanto, palacios, torres e iglesias. Pero además de su belleza barroca, su historia esconde un importantísimo pasado romano que asombra al visitante.\r\n\r\nNuestros guías locales serán tus anfitriones en una magnífica visita guiada en la que descubrirás el Palacio de Benamejí, sede del museo de la ciudad que alberga un gran colección de mosaicos; el Palacio de Peñaflor, una joya barroca desde la que divisarás las mejores vistas de las torres; el Arca Real del Agua, curiosísimo y pequeño edificio del siglo XVI y el Estanque Romano en el corazón de la ciudad.\r\n\r\nLa mejor forma de conocer Écija al detalle y disfrutar de una experiencia inolvidable. Tenemos la llave de la historia de la ciudad, que te permitirá viajar a su pasado desde el interior de sus monumentos.', 10, 'Palacio de Benamejí', 15, 9, 41),
+(44, 'Paseo en calesa por Sevilla', 'Vive una de las experiencias más auténticas de la capital andaluza. Recorre el centro histórico de Sevilla en coche de caballos, el medio de transporte con más encanto de la ciudad. ¡Pura esencia hispalense!', 'Vive una de las experiencias más auténticas de la capital andaluza. Recorre el centro histórico de Sevilla en coche de caballos, el medio de transporte con más encanto de la ciudad. ¡Pura esencia hispalense!', 79, 'Calle Arfe', 15, 8, 35),
+(45, 'Paddle surf en el río Guadalquivir', '¿Te gustaría remar o hacer surf en el río Guadalquivir?, en este tour te divertirás remando por las aguas de Sevilla mientras admiras algunos de sus monumentos más famosos. ¡Un proyecto muy original!', '¿Queréis hacer paddle surf en el río Guadalquivir? Con este tour nos divertiremos remando por las aguas de Sevilla mientras admiramos algunos de sus monumentos más famosos. ¡Un plan muy original!', 29, 'Estación de autobuses de la Plaza de Armas.', 15, 8, 35),
+(46, 'Tour de tapas por Sevilla', 'Satisfaga su paladar con un auténtico festín y descubra lo mejor de la cocina andaluza en este tour de tapas por Sevilla. ¡No te pierdas el bombo!', 'En este tour de tapas por Sevilla disfrutaremos de un auténtico festival para vuestro paladar y descubriremos los mejores platos andaluces. ¡No os lo podéis perder!', 40, 'Plaza del Altozano.', 15, 1, 35),
+(47, 'Excursión a las bodegas Salado', 'Sumérgete en la cultura del vino andaluz en este tour a Bodegas Salado desde Sevilla. Conoce la finca y prueba sus tres platos estrella.', 'Adéntrate en la cultura del vino andaluz con esta excursión a las bodegas Salado desde Sevilla. Conocerás la finca y probarás tres de sus especialidades.', 72, 'Calle Trajano', 15, 1, 35),
+(48, 'Museo de Bellas Artes de Sevilla', 'Un museo hermoso y bien distribuido con una colección de obras muy rica en un edificio muy hermoso.\r\n', 'Un museo precioso, bien distribuido, con una colección de obras muy amplia dentro de unas instalaciones que no estropean el conjunto porque el edificio es muy bonito. Puedes pasar horas allí sin ser consciente del tiempo. Y con tantas exposiciones itinerantes, siempre hay una nueva excusa para volver.', 0, 'Pl. del Museo', 15, 2, 35),
+(49, 'Museo de las Ilusiones Sevilla', 'Fue una experiencia muy divertida y curiosa en un espacio muy bien diseñado. Perfecta para viajar con niños, familias y grupos de amigos.', 'Fue un espacio muy bien diseñado y una experiencia muy agradable y curiosa. Perfecta para viajar con niños, familias y grupos de amigos. Se pueden hacer muchas ilusiones ópticas con un teléfono móvil para tomar fotografías muy interesantes y divertidas. Además, el personal ayudará y tomará fotografías.', 12, 'San Eloy', 15, 2, 35),
+(50, 'Parque de María Luisa', 'El parque María Luisa, un parque sevillano precioso para dar un paseo en una tarde fresca.', 'El Parque de María Luisa es el primer parque urbano de Sevilla y uno de los pulmones verdes de Sevilla. Fue declarado Bien de Interés Cultural en 1983 con la categoría de jardines históricos e inaugurado el 18 de abril de 1914 como Parque Municipal Infanta María Luisa Fernanda.', 0, 'P.º de las Delicias', 15, 3, 35),
+(51, 'Parque de Miraflores', 'Parque de 90 hectáreas, el más grande de Sevilla, situado en torno a 2 huertas de la época romana.', 'Perfecto para andar, correr, sacar al perro o ir con amigos.', 0, 'Av. las Asociaciones de Vecinos', 16, 3, 35),
+(52, 'Torre del Oro ', 'Una experiencia encantadora infiltrandote en un monumento historico.', 'La Torre del Oro de Sevilla fue construida en 1221 en la Torre de Alvarana en la margen izquierda del río Guadalquivir en la ciudad de Sevilla, Andalucía, España. Se trata de una torre que consta de tres cuerpos.', 0, 'P.º de Cristóbal Colón', 16, 4, 35),
+(53, 'Visita La Giralda', 'Una visita guiada por la Giralda, uno de los monumentos más famosos de Sevilla.', 'Giralda es el nombre que recibe la torre campanario de la catedral de Santa María de la Sede de la ciudad de Sevilla, en Andalucía.', 25, 'Av. de la Constitución', 16, 9, 35),
+(54, 'El Real Alcázar de Sevilla', 'El Alcázar de Sevilla es un conjunto palaciego amurallado construido en diferentes fases históricas. El palacio original fue construido a principios de la Edad Media. También hay algunas ruinas de arte islámico, incluyendo salas del palacio mudéjar y salas góticas de la conquista castellana.', 'El conjunto del Real Alcázar de Sevilla tiene su origen en la evolución que la antigua Hispalis romana, la Spali de tiempo de los godos, experimentó durante la Alta Edad Media, cuando la ciudad pasó a denominarse Ixbilia. Y más concretamente a comienzos del siglo X.', 13, 'Patio de Banderas', 16, 4, 35),
+(55, 'Tour de misterios y leyendas de Triana', 'Florinda (La Cava), hija del conde Don Julián, cautivó desde el principio a Don Rodrigo, pero... Para conocer el final de esta y otras leyendas de Triana no puedes perderte esta visita guiada.', 'Itinerario A las 21:00 horas, comienza tu visita guiada a las leyendas de Triana, justo al lado del famoso Puente de Isabel II o Triana, junto a la Capilla del Carmen.\r\nTriana es uno de los barrios de Sevilla con mayor número de leyendas, anécdotas e historias.\r\nConocimos las terroríficas leyendas asociadas a este plato antes de continuar nuestro paseo por el barrio.\r\nEsta historia sirve de punto de partida para contar la historia de los gitanos de Triana. Su cante y baile fueron los orígenes del flamenco del siglo XVIII.', 12, 'Capilla del Carmen', 16, 5, 35),
+(56, 'Tour de los misterios y leyendas de Sevilla', 'Santa Cruz, los alrededores de la Catedral y el Alcázar... Descubre en este tour nocturno por Sevilla la historia y el patrimonio de la ciudad hispalense.', 'Itinerario\r\nNos reuniremos a la hora indicada en la céntrica Plaza del Triunfo, junto a la escultura de la Inmaculada. Desde aquí comenzaremos un tour a pie de dos horas aproximadas de duración en el que intentaremos descifrar los enigmas de Sevilla, explicando también relevantes acontecimientos históricos.\r\n\r\nRealizaremos nuestra primera parada en las calles de Santa Cruz. Este barrio sevillano ha sido testigo de multitud de leyendas relacionadas con el pasado romano, árabe y judío de la ciudad. Conoceremos estas rocambolescas historias antes de proseguir con la ruta.\r\n\r\nEl siguiente punto en el que nos detendremos será la Calle Fabiola, también tendremos la oportunidad de conocer la historia de sus calles y edificios, de un gran patrimonio artístico y cultural.\r\n\r\nTras aprender amenas lecciones de Historia, nos dirigiremos hasta la Plaza de la Alfalfa, origen de un duelo a muerte cuyo relato no nos dejará indiferentes. Continuaremos contando más relatos por el centro histórico de Sevilla hasta llegar a la Calle Laraña. Aquí finalizará la ruta nocturna por Sevilla.', 10, 'Plaza del Triunfo', 16, 5, 35),
+(57, 'Visita guiada por el Archivo de Indias', 'En esta visita guiada por el Archivo de Indias descubriremos la apasionante historia de la ciudad de Sevilla y su relación con las Américas. ¿Os lo vais a perder?', 'Nos encontraremos a la hora indicada frente al Archivo de Indias de Sevilla, donde comenzaremos una visita guiada por este edificio Patrimonio de la Humanidad.\r\nSeguiremos la visita guiada en el interior del Archivo de Indias para conocer su función y todo lo que atesora tras sus muros.', 12, 'Archivo de Indias', 16, 9, 35),
+(58, 'Plaza del Cabildo', 'Se trata de una plaza semicircular poco conocida por los turistas e incluso para algunos sevillanos, pero con un encanto especial. ', 'Se dispone en torno a una fuente central con frondosa vegetación. Al otro lado del semicírculo la muralla almohade cierra la plaza. Especialmente bonitos son sus accesos mediante pasadizos. Los bajos de la plaza tienen una interesante solución de arcos sobre columnas que siguen el desarrollo curvo de la fachada. Además los voladizos están decorados con motivos florales pintados al fresco.', 0, 'Pl. del Cabildo', 16, 6, 35),
+(59, 'Alameda de Hércules', 'Esta alargada plaza y su entorno se han convertido desde los años 90 en el escenario de la escena alternativa de la ciudad. ', 'Se podría definir como la zona bohemia de la ciudad, donde abunda la diversidad y la cultura urbana. Si queréis huir de lo típico sevillano, este es vuestro lugar. Sus calles están llenas de vida. Encontraréis bares de toda la vida y nuevos locales que ofrecen cocina innovadora, vegetariana o ecológica.', 0, 'Alameda de Hércules', 16, 6, 35),
+(60, 'Espectáculo en el Museo del Baile Flamenco', 'Tradición, cultura y, por encima de todo, espectáculo. El flamenco es todo eso y mucho más. Ahora podéis disfrutar de un show único en el Museo del Baile Flamenco de Sevilla. ¡Arte en estado puro!', 'Bienvenidos al Museo del Baile Flamenco. A la hora que elijáis, este edificio del siglo XVIII os abrirá las puertas de su patio para ofreceros un espectáculo que os dejará enamorados de por vida del arte flamenco. ¡Empieza el show!\r\n\r\nVestidos largos, ritmos ardientes, movimientos sensuales, castañuelas... Coreografías espectaculares y perfectamente acompasadas con música en vivo y una iluminación muy cuidada.\r\nDurante una hora, la imponente puesta en escena de esta función hará que entendáis por qué nadie quiere perderse este arte popular. ¡Un imprescindible si estáis en Sevilla!', 25, 'Museo del Baile Flamenco', 16, 7, 35),
+(61, 'Espectáculo flamenco en barco', 'En esta actividad disfrutaréis de un espectáculo de flamenco a bordo de un barco en el río Guadalquivir. Descubriréis los secretos de este arte de una forma diferente y amena mientras os enamoráis de Sevilla desde el agua. ¡Querréis repetir!', 'Antes de comenzar el paseo en barco, cuatro artistas realizarán dos shows de aproximadamente 20 minutos cada uno. Poco a poco, empezaremos a escuchar los primeros acordes de guitarra. ¡Olé, qué arte! En el descanso entre los espectáculos, os serviremos una copa de sangría para brindar por la experiencia. \r\n\r\nLos bailaores y músicos flamencos os envolverán con su duende haciéndoos vivir un momento realmente mágico a bordo del barco. Una vez haya finalizado el show flamenco, a las 23:00 horas, empezaremos a surcar las aguas del río Guadalquivir. ¡El broche de oro perfecto!', 28, 'P.º Alcalde Marqués del Contadero', 16, 7, 35),
+(65, 'Prueba', 'sad', 'asd', 2, 'sad', 15, 1, 41);
 
 -- --------------------------------------------------------
 
@@ -187,10 +255,10 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`usu_id`, `usu_nom`, `usu_apes`, `usu_email`, `usu_pass`, `usu_tel`, `usu_ciu`, `usu_pais`, `usu_rol`) VALUES
-(11, 'prueba2', NULL, 'b@b', '$2y$10$mIHK3viMoGCIW.X91ma2l.RAEPI0JAfcnHxJgkjmtBTe5/9K9gl5O', NULL, NULL, NULL, 0),
-(12, 'Mihail', 'pistol', 'm@m', '$2y$10$Nbsx5/IV70loA5czp9fm6uUnefnwvy4E9iniv6q3x5.wVOLzqGl7O', 642366144, 'Ecija', 'España', 0),
-(13, 'David', NULL, 'davidfolgosa89@gmail.com', '$2y$10$1q0Dvscov5/TaNad/acHWuzSe7ysz60lK4SGS3Ap8bUBhr1MyLSCW', NULL, NULL, NULL, 0),
-(14, 'daniel', 'martin', 'daniel@gmail.com', '$2y$10$CnMCATzQzHuF1jryw8UjfOOiPkC.ed8vTZAgMqPE2nZv7XBiI/w6y', 642555999, 'Écija', 'España', 0);
+(15, 'Mihail', NULL, 'smr2pim@gmail.com', '$2y$10$F4R68MYwRNbDMIgVn56T8eQsEOBNiPEjJ7skf3ucFeWo/eL7FVQjC', NULL, NULL, NULL, 1),
+(16, 'Paula', NULL, 'villaecijadiazp@gmail.com', '$2y$10$/iv6hQmMwRvvZiRnZMqrpeoO6lSraLn0NIEd5eoyfSLmSlRGlLlry', NULL, NULL, NULL, 0),
+(17, 'Mihail', NULL, 'm@gmail.com', '$2y$10$uIXyC74a4Y3KCtY.Iq6Eluq5MQMAm1hpADOorXHLtLks8Fhqx3Z/i', NULL, NULL, NULL, 0),
+(18, 'Mihail', 'Pistol', 'mihail@manualuso.com', '$2y$10$TmXSn4Bcrj3jD2GMcCSlredyub4.3CuuwJeisyS1QL7iAsMglAGCO', 666999888, 'Écija', 'España', 0);
 
 --
 -- Índices para tablas volcadas
@@ -212,19 +280,26 @@ ALTER TABLE `ciudad`
 -- Indices de la tabla `comentario`
 --
 ALTER TABLE `comentario`
-  ADD PRIMARY KEY (`com_id`);
+  ADD PRIMARY KEY (`com_id`),
+  ADD KEY `post_cod` (`post_cod`),
+  ADD KEY `usu_cod` (`usu_cod`);
 
 --
 -- Indices de la tabla `imagenes`
 --
 ALTER TABLE `imagenes`
-  ADD PRIMARY KEY (`img_id`);
+  ADD PRIMARY KEY (`img_id`),
+  ADD KEY `id_post` (`id_post`),
+  ADD KEY `id_usu` (`id_usu`);
 
 --
 -- Indices de la tabla `post`
 --
 ALTER TABLE `post`
-  ADD PRIMARY KEY (`post_id`);
+  ADD PRIMARY KEY (`post_id`),
+  ADD KEY `ciu_cod` (`ciu_cod`),
+  ADD KEY `cat_cod` (`cat_cod`),
+  ADD KEY `usu_cod` (`usu_cod`);
 
 --
 -- Indices de la tabla `usuario`
@@ -240,37 +315,37 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `cat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `cat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
-  MODIFY `ciu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ciu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT de la tabla `comentario`
 --
 ALTER TABLE `comentario`
-  MODIFY `com_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `com_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes`
 --
 ALTER TABLE `imagenes`
-  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `img_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT de la tabla `post`
 --
 ALTER TABLE `post`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `usu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `usu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Restricciones para tablas volcadas
@@ -280,20 +355,23 @@ ALTER TABLE `usuario`
 -- Filtros para la tabla `comentario`
 --
 ALTER TABLE `comentario`
-  ADD CONSTRAINT `comentario_ibfk_2` FOREIGN KEY (`post_cod`) REFERENCES `post` (`post_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `comentario_ibfk_2` FOREIGN KEY (`post_cod`) REFERENCES `post` (`post_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comentario_ibfk_3` FOREIGN KEY (`usu_cod`) REFERENCES `usuario` (`usu_id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `imagenes`
 --
 ALTER TABLE `imagenes`
-  ADD CONSTRAINT `imagenes_ibfk_2` FOREIGN KEY (`id_usu`) REFERENCES `usuario` (`usu_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `imagenes_ibfk_2` FOREIGN KEY (`id_usu`) REFERENCES `usuario` (`usu_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `imagenes_ibfk_3` FOREIGN KEY (`id_post`) REFERENCES `post` (`post_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `post`
 --
 ALTER TABLE `post`
-  ADD CONSTRAINT `post_ibfk_2` FOREIGN KEY (`cat_cod`) REFERENCES `categoria` (`cat_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `post_ibfk_3` FOREIGN KEY (`ciu_cod`) REFERENCES `ciudad` (`ciu_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `post_ibfk_1` FOREIGN KEY (`cat_cod`) REFERENCES `categoria` (`cat_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `post_ibfk_2` FOREIGN KEY (`usu_cod`) REFERENCES `usuario` (`usu_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `post_ibfk_3` FOREIGN KEY (`ciu_cod`) REFERENCES `ciudad` (`ciu_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
