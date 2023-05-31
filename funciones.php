@@ -47,7 +47,7 @@ function theHeader($conexion)
             <a class="nav-link" href="./index.php">Inicio</a>
           </li>
           <li class="nav-item escalar">
-            <a class="nav-link" href="#">Acerca de</a>
+            <a class="nav-link" href="./acercade.php">Acerca de</a>
           </li>
         </ul>
 

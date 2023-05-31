@@ -18,6 +18,7 @@ require_once 'conexion.php';
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" href="./css/style.css">
 	<link rel="stylesheet" type="text/css" href="./css/my-login.css">
+	<link rel="stylesheet" href="./css/registro.css">
 	<?php
 
 	/**
@@ -110,7 +111,7 @@ require_once 'conexion.php';
 								<div class="form-group">
 									<div class="custom-checkbox custom-control">
 										<input type="checkbox" name="agree" id="agree" class="custom-control-input" required="">
-										<label for="agree" class="custom-control-label">Estoy de acuerdo con <a href="#">Terminos y Condiciones</a></label>
+										<label for="agree" class="custom-control-label">Estoy de acuerdo con <a id="openModalBtn" href="#" data-toggle="modal" data-target="#modal">Términos y Condiciones</a></label>
 										<div class="invalid-feedback">
 											Tienes que leer y aceptar nuestros Terminos y Condiciones
 										</div>
@@ -127,13 +128,40 @@ require_once 'conexion.php';
 								</div>
 
 							</form>
+							<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="modalLabel">Términos y Condiciones</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p>Aquí van los términos y condiciones de Plans For Today...</p>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam aliquet, risus sed cursus commodo, lorem odio bibendum purus, a dapibus quam justo sed lorem. Duis vel leo ligula. Mauris volutpat metus vitae dolor lobortis efficitur.</p>
+											<p>...</p>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+											<a id="acceptBtn" href="#" class="btn btn-primary" data-dismiss="modal">Aceptar</a>
+										</div>
+									</div>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-
+	<script>
+		document.getElementById("acceptBtn").addEventListener("click", function() {
+			var agreeCheckbox = document.getElementById("agree");
+			agreeCheckbox.checked = true;
+		});
+	</script>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	<script src="./js/my-login.js"></script>
